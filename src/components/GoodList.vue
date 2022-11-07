@@ -14,10 +14,191 @@
       <div class="header-register">注册</div>
     </div>
 
-    <div class="bgrcolor" style="height:1460px">
+    <div class="bgrcolor" style="height: 1460px">
       <div>
         <div class="condition bgrwhite">
+          <div class="condition-block">
+            <div class="condition-block-title">分类:</div>
+            <div class="condition-block-item" ref="condition1">
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
 
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+            </div>
+            <div class="condition-block-pull">
+              <div
+                class="condition-block-pull-button"
+                @click="handlePullDown(1)"
+              >
+                下拉/隐藏
+              </div>
+            </div>
+          </div>
+
+          <div class="condition-block">
+            <div class="condition-block-title">分类:</div>
+            <div class="condition-block-item" ref="condition2">
+              <div class="isCondition">大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+            </div>
+            <div class="condition-block-pull">
+              <div
+                class="condition-block-pull-button"
+                @click="handlePullDown(2)"
+              >
+              下拉/隐藏
+              </div>
+            </div>
+          </div>
+
+          <div class="condition-block">
+            <div class="condition-block-title">分类:</div>
+            <div class="condition-block-item" ref="condition3">
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+              <div>手机相机</div>
+              <div>大家电</div>
+              <div>海外购</div>
+            </div>
+            <div class="condition-block-pull">
+              <div
+                class="condition-block-pull-button"
+                @click="handlePullDown(3)"
+              >
+              下拉/隐藏
+              </div>
+            </div>
+          </div>
         </div>
         <div class="rank bgrwhite">
           <p class="rank-title">SCUTer TOP 8</p>
@@ -197,7 +378,63 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {};
+  },
+  mounted(){
+    this.$refs.condition1.style.overflow = "hidden"
+    this.$refs.condition2.style.overflow = "hidden"
+    this.$refs.condition3.style.overflow = "hidden"
+
+  },
+  methods: {
+    handlePullDown(index) {
+      if (index == 1) {
+        if (this.$refs.condition1.style.overflow == "hidden") {
+          this.$refs.condition1.style.overflow = "visible";
+          this.$refs.condition1.style.zIndex = 100;
+          this.$refs.condition1.style.height = "fit-content";
+          this.$refs.condition1.style.border = "1px solid #888";
+        }
+        else{
+          this.$refs.condition1.style.overflow = "hidden";
+          this.$refs.condition1.style.zIndex = "";
+          this.$refs.condition1.style.height = "100%";
+          this.$refs.condition1.style.border = "none";
+        }
+      }
+      if (index == 2) {
+        if (this.$refs.condition2.style.overflow == "hidden") {
+          this.$refs.condition2.style.overflow = "visible";
+          this.$refs.condition2.style.zIndex = 100;
+          this.$refs.condition2.style.height = "fit-content";
+          this.$refs.condition2.style.border = "1px solid #888";
+        }
+        else{
+          this.$refs.condition2.style.overflow = "hidden";
+          this.$refs.condition2.style.zIndex = "";
+          this.$refs.condition2.style.height = "100%";
+          this.$refs.condition2.style.border = "none";
+        }
+      }
+      if (index == 3) {
+        if (this.$refs.condition3.style.overflow == "hidden") {
+          this.$refs.condition3.style.overflow = "visible";
+          this.$refs.condition3.style.zIndex = 100;
+          this.$refs.condition3.style.height = "fit-content";
+          this.$refs.condition3.style.border = "1px solid #888";
+        }
+        else{
+          this.$refs.condition3.style.overflow = "hidden";
+          this.$refs.condition3.style.zIndex = "";
+          this.$refs.condition3.style.height = "100%";
+          this.$refs.condition3.style.border = "none";
+        }
+      }
+    },
+  },
+};
 </script>
 
 <style>
@@ -290,6 +527,7 @@ li {
 }
 
 .condition {
+  padding: 5%;
   margin-top: 50px;
   margin-left: 3%;
   margin-right: 3%;
@@ -298,6 +536,55 @@ li {
   display: inline-block;
   border-radius: 20px;
   vertical-align: top;
+  box-sizing: border-box;
+  color: #444;
+}
+.condition-block {
+  display: flex;
+  height: 33%;
+  border-bottom: 1px solid #888;
+  padding: 2% 0 0;
+  box-sizing: border-box;
+}
+.condition-block-title {
+  flex: 2;
+}
+.condition-block-item {
+  flex: 10;
+  overflow: hidden;
+  background-color: white;
+
+  /* height: fit-content; */
+}
+.condition-block-pull {
+  flex: 1;
+  position: relative;
+}
+.condition-block-pull-button {
+  position: absolute;
+  top: 72.5%;
+  left: 20%;
+  background-color: #349efa;
+  color: white;
+  width: 60px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+.condition-block-item > div {
+  text-align: center;
+  height: 33%;
+  width: 14%;
+  display: inline-block;
+  line-height: 32px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.isCondition {
+  background-color: #349efa;
+  color: white;
 }
 .rank {
   margin-top: 50px;
@@ -311,6 +598,7 @@ li {
   padding: 0 2%;
   box-sizing: border-box;
 }
+
 .rank-title {
   text-align: center;
   font-size: 24px;
@@ -335,10 +623,8 @@ li {
   vertical-align: top;
 }
 .rank-sort-link {
-    
-  
   width: 90%;
-  font-size:1.4rem;
+  font-size: 1.4rem;
   vertical-align: top;
   overflow: hidden;
 }
@@ -365,7 +651,7 @@ li {
   box-sizing: border-box;
   margin: 1%;
   border-radius: 10px;
-  border: 1px solid #AAA;
+  border: 1px solid #aaa;
   background-color: white;
 
   vertical-align: top;

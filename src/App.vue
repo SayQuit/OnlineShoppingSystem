@@ -1,13 +1,14 @@
 <template>
-  <good-list></good-list>
+  <good-detail></good-detail>
 </template>
 
 <script>
-import GoodList from './components/GoodList.vue'
+import GoodDetail from './components/GoodDetail.vue';
 export default {
   name: 'App',
   components: {
-    GoodList,
+    GoodDetail
+
 }
 }
 </script>
