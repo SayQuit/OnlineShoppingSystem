@@ -1,14 +1,13 @@
 <template>
-  <RegisterPage></RegisterPage>
+  <good-list></good-list>
 </template>
 
 <script>
-import RegisterPage from './components/RegisterPage.vue';
-
+import GoodList from './components/GoodList.vue'
 export default {
   name: 'App',
   components: {
-    RegisterPage
+    GoodList,
 }
 }
 </script>

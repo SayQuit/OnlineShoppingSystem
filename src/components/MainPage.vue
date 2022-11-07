@@ -217,8 +217,8 @@ export default {};
 .header-search-input {
   display: inline-block;
   outline: none;
-  width: 300px;
-  height: 25px;
+  width: 360px;
+  height: 40px;
   padding-left: 10px;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -227,11 +227,11 @@ export default {};
 }
 .header-search-click {
   display: inline-block;
-  height: 25px;
-  width: 40px;
+  height: 40px;
+  width: 80px;
   text-align: center;
-  line-height: 25px;
-  background-color: #ff1d18;
+  line-height: 40px;
+  background-color: #349EFA;
   color: white;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -247,8 +247,8 @@ export default {};
   text-align: center;
   vertical-align: top;
   border-radius: 5px;
-  border: 1px solid #ff1d18;
-  color: #ff1d18;
+  border: 1px solid #349EFA;
+  color: #349EFA;
 }
 .header-login {
   display: inline-block;
@@ -279,11 +279,11 @@ export default {};
   box-sizing: border-box;
 }
 .nav div:hover {
-  border-bottom: 2px solid skyblue;
+  border-bottom: 2px solid #349EFA;
   cursor: pointer;
   box-sizing: border-box;
 
-  color: skyblue;
+  color: #349EFA;
 }
 
 .swiper {
@@ -301,7 +301,7 @@ export default {};
   width: 30%;
   display: inline-block;
   vertical-align: top;
-  height: 400px;
+  height: 450px;
   margin-right: 5%;
 
   border-radius: 10px;
@@ -361,12 +361,15 @@ export default {};
 .main-user {
   width: 60%;
   display: inline-block;
-  height: 400px;
+  height: 450px;
   border: 1px solid #999;
   border-radius: 10px;
   vertical-align: top;
 
   flex-direction: column;
+  padding:0 5%;
+  box-sizing: border-box;
+  background-color: #F0F8FA;
 }
 .main-user-profile {
   height: 40%;
@@ -401,45 +404,55 @@ export default {};
   height: 100px;
   border-radius: 80px;
   border: 1px solid #999;
+
 }
 .main-user-operation {
   height: 25%;
   width: 100%;
-  display: flex;
+  /* display: flex; */
   font-size: 20px;
+  
 }
 .main-user-operation-login {
   position: relative;
-  flex: 1;
+  width: 40%;
+  height: 100%;
+  display: inline-block;  
+  margin-left: 10%;
+
 }
 .main-user-operation-login-button {
-  background-color: royalblue;
+  background-color: #349EFA;
   border-radius: 10px;
-  line-height: 50px;
+  line-height: 42px;
   text-align: center;
   display: inline-block;
-  width: 30%;
-  height: 50%;
+  width: 40%;
+  height: 40%;
   color: white;
 }
 .main-user-operation-register {
   position: relative;
-  flex: 1;
+  width: 40%;
+  height: 100%;
+  display: inline-block;
+  margin-right: 10%;
+
 }
 .main-user-operation-register-button {
   border-radius: 10px;
-  line-height: 50px;
+  line-height: 42px;
   text-align: center;
   display: inline-block;
-  width: 30%;
-  height: 50%;
+  width: 40%;
+  height: 40%;
 
-  color: royalblue;
-  border: 3px solid royalblue;
+  color: #349EFA;
+  border: 3px solid #349EFA;
 }
 .main-user-nav {
   height: 35%;
-  padding: 0 10%;
+  /* padding: 0 10%; */
   display: flex;
 }
 .main-user-nav-item {

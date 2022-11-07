@@ -17,16 +17,11 @@
         <div class="inputBlock">
           <table>
             <tr>
-              <td><h1>手机号:</h1></td>
+              <td><h1>昵称:</h1></td>
               <td><input type="text" /></td>
-              <td><p class="input_error">手机号码格式不正确,请重新输入</p></td>
+              <td><p class="input_success">昵称</p></td>
             </tr>
 
-            <tr>
-              <td><h1>短信验证码:</h1></td>
-              <td><input type="text" /></td>
-              <td><p class="input_success">短信验证码输入正确</p></td>
-            </tr>
 
             <tr>
               <td><h1>登陆密码:</h1></td>
@@ -56,7 +51,7 @@
                 <div class="protocal">
                   <input type="checkbox" />
                   <p>同意协议并注册</p>
-                  <a href="#">《知晓用户协议》</a>
+                  <a href="https://cdn.awsbj0.fds.api.mi-img.com/huami-amazfit-production/0_agreements/zh-CNAgreement-20170809.html">《知晓用户协议》</a>
                 </div>
               </td>
             </tr>
@@ -288,7 +283,7 @@ table {
 }
 
 .redline {
-  background-color: #b1191a;
+  background-color: #349EFA;
   height: 3px;
 }
 
@@ -415,7 +410,7 @@ table {
 }
 .registerTitle > div > a {
   display: inline-block;
-  color: #b1191a;
+  color: #349EFA;
   font-size: 14px;
 }
 
@@ -490,7 +485,7 @@ input {
   width: 200px;
   height: 35px;
 
-  background-color: #b1191a;
+  background-color: #349EFA;
 
   text-align: center;
   line-height: 35px;

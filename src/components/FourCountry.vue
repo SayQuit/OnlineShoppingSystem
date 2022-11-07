@@ -139,8 +139,8 @@ export default {};
 .header-search-input {
   display: inline-block;
   outline: none;
-  width: 300px;
-  height: 25px;
+  width: 360px;
+  height: 40px;
   padding-left: 10px;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -149,11 +149,11 @@ export default {};
 }
 .header-search-click {
   display: inline-block;
-  height: 25px;
-  width: 40px;
+  height: 40px;
+  width: 80px;
   text-align: center;
-  line-height: 25px;
-  background-color: #ff1d18;
+  line-height: 40px;
+  background-color: #349EFA;
   color: white;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -169,8 +169,8 @@ export default {};
   text-align: center;
   vertical-align: top;
   border-radius: 5px;
-  border: 1px solid #ff1d18;
-  color: #ff1d18;
+  border: 1px solid #349EFA;
+  color: #349EFA;
 }
 .header-login {
   display: inline-block;
@@ -237,7 +237,7 @@ export default {};
   
 }
 .goods-item-price{
-  color: #ff1d18;
+  color: #CE0000;
   font-size: 18px;
 }
 .footer {
