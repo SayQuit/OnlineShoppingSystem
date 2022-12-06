@@ -1,14 +1,14 @@
 <template>
-  <!-- <router-view></router-view> -->
-  <settle-account></settle-account>
+  <router-view></router-view>
+  <!-- <settle-account></settle-account> -->
 </template>
 
 <script>
-import SettleAccount from './components/SettleAccount.vue'
+// import SettleAccount from './components/SettleAccount.vue'
 export default {
   name: 'App',
   components: {
-    SettleAccount
+    // SettleAccount
 
 }
 }

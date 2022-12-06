@@ -7,6 +7,10 @@ const LoginPage=()=>import('@/components/LoginPage.vue')
 const MainPage=()=>import('@/components/MainPage.vue')
 const RegisterPage=()=>import('@/components/RegisterPage.vue')
 
+const CarPage=()=>import('@/components/CarPage.vue')
+const OrderPage=()=>import('@/components/OrderPage.vue')
+const SettleAccount=()=>import('@/components/SettleAccount.vue')
+
 
 
 
@@ -41,6 +45,21 @@ const routes = [
         path: '/RegisterPage',
         name: 'RegisterPage',
         component: RegisterPage,
+    },
+    {
+        path: '/CarPage',
+        name: 'CarPage',
+        component: CarPage,
+    },
+    {
+        path: '/SettleAccount',
+        name: 'SettleAccount',
+        component: SettleAccount,
+    },
+    {
+        path: '/OrderPage',
+        name: 'OrderPage',
+        component: OrderPage,
     },
 
     
