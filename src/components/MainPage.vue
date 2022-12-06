@@ -7,11 +7,11 @@
       </div>
       <div class="header-search">
         <input type="text" class="header-search-input" placeholder="请输入" />
-        <div class="header-search-click">搜索</div>
+        <div class="header-search-click" @click="goPage('GoodList')">搜索</div>
       </div>
       <div class="header-car">购物车结算</div>
-      <div class="header-login">登录</div>
-      <div class="header-register">注册</div>
+      <div class="header-login" @click="goPage('LoginPage')">登录</div>
+      <div class="header-register" @click="goPage('RegisterPage')">注册</div>
     </div>
 
     <div class="nav">
@@ -91,10 +91,10 @@
         </div>
         <div class="main-user-operation">
           <div class="main-user-operation-login">
-            <div class="main-user-operation-login-button mid">登录</div>
+            <div class="main-user-operation-login-button mid" @click="goPage('LoginPage')">登录</div>
           </div>
           <div class="main-user-operation-register">
-            <div class="main-user-operation-register-button mid">注册</div>
+            <div class="main-user-operation-register-button mid" @click="goPage('RegisterPage')">注册</div>
           </div>
         </div>
         <div class="main-user-nav">
@@ -130,13 +130,14 @@
     </div>
 
     <div class="bottomNav">
-      <div class="bottomNav-item">
+      <div class="bottomNav-item" @click="goPage('FourCountry')">
         <div class="bottomNav-item-item1">
           <img src="../assets/bnav1.jpg" />
           <div>四国直邮纵享世界</div>
         </div>
       </div>
-      <div class="bottomNav-item">
+
+      <div class="bottomNav-item" @click="goPage('FourCountry')">
         <div class="bottomNav-item-item2">
           <div class="bottomNav-item-item2-title">奥莱折扣低至一折</div>
           <div class="bottomNav-item-item2-item">
@@ -160,7 +161,8 @@
           <div class="bottomNav-item-item2-item"></div>
         </div>
       </div>
-      <div class="bottomNav-item">
+
+      <div class="bottomNav-item" @click="goPage('FourCountry')">
         <div class="bottomNav-item-item1">
           <img src="../assets/bnav3.jpg" />
           <div>潮流新品研究会</div>
@@ -179,7 +181,20 @@
 </template>
   
   <script>
-export default {};
+import { useRouter } from "vue-router";
+export default {
+  setup() {
+    const router = useRouter();
+    return {
+      router,
+    };
+  },
+  methods: {
+    goPage(pageName) {
+      this.router.push({ name: pageName });
+    },
+  },
+};
 </script>
   
   <style scoped>
@@ -231,11 +246,12 @@ export default {};
   width: 80px;
   text-align: center;
   line-height: 40px;
-  background-color: #349EFA;
+  background-color: #349efa;
   color: white;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   vertical-align: top;
+  cursor: pointer;
 }
 .header-car {
   display: inline-block;
@@ -247,8 +263,8 @@ export default {};
   text-align: center;
   vertical-align: top;
   border-radius: 5px;
-  border: 1px solid #349EFA;
-  color: #349EFA;
+  border: 1px solid #349efa;
+  color: #349efa;
 }
 .header-login {
   display: inline-block;
@@ -258,6 +274,7 @@ export default {};
   line-height: 25px;
   text-align: center;
   vertical-align: top;
+  cursor: pointer;
 }
 .header-register {
   display: inline-block;
@@ -267,10 +284,12 @@ export default {};
   line-height: 25px;
   text-align: center;
   vertical-align: top;
+  cursor: pointer;
 }
 .nav {
   width: 1440px;
   display: flex;
+  height: fit-content;
 }
 .nav div {
   flex: 1;
@@ -279,11 +298,11 @@ export default {};
   box-sizing: border-box;
 }
 .nav div:hover {
-  border-bottom: 2px solid #349EFA;
+  border-bottom: 2px solid #349efa;
   cursor: pointer;
   box-sizing: border-box;
 
-  color: #349EFA;
+  color: #349efa;
 }
 
 .swiper {
@@ -367,9 +386,9 @@ export default {};
   vertical-align: top;
 
   flex-direction: column;
-  padding:0 5%;
+  padding: 0 5%;
   box-sizing: border-box;
-  background-color: #F0F8FA;
+  background-color: #f0f8fa;
 }
 .main-user-profile {
   height: 40%;
@@ -404,25 +423,22 @@ export default {};
   height: 100px;
   border-radius: 80px;
   border: 1px solid #999;
-
 }
 .main-user-operation {
   height: 25%;
   width: 100%;
   /* display: flex; */
   font-size: 20px;
-  
 }
 .main-user-operation-login {
   position: relative;
   width: 40%;
   height: 100%;
-  display: inline-block;  
+  display: inline-block;
   margin-left: 10%;
-
 }
 .main-user-operation-login-button {
-  background-color: #349EFA;
+  background-color: #349efa;
   border-radius: 10px;
   line-height: 42px;
   text-align: center;
@@ -430,6 +446,7 @@ export default {};
   width: 40%;
   height: 40%;
   color: white;
+  cursor: pointer;
 }
 .main-user-operation-register {
   position: relative;
@@ -437,7 +454,6 @@ export default {};
   height: 100%;
   display: inline-block;
   margin-right: 10%;
-
 }
 .main-user-operation-register-button {
   border-radius: 10px;
@@ -446,9 +462,10 @@ export default {};
   display: inline-block;
   width: 40%;
   height: 40%;
+  cursor: pointer;
 
-  color: #349EFA;
-  border: 3px solid #349EFA;
+  color: #349efa;
+  border: 3px solid #349efa;
 }
 .main-user-nav {
   height: 35%;
@@ -480,6 +497,7 @@ export default {};
 .bottomNav-item {
   flex: 1;
   padding: 30px;
+  cursor: pointer;
 }
 .bottomNav-item-item1 {
   width: 100%;

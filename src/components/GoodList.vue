@@ -273,7 +273,7 @@
       </div>
 
       <div class="goods bgrwhite">
-        <div class="goods-item">
+        <div class="goods-item" @click="goPage('GoodDetail')">
           <div class="goods-item-image">
             <img src="../assets/good.jpg" class="mid" />
           </div>
@@ -378,7 +378,15 @@
 </template>
 
 <script>
+
+import { useRouter } from "vue-router";
 export default {
+  setup() {
+    const router = useRouter();
+    return {
+      router,
+    };
+  },
   data() {
     return {};
   },
@@ -389,6 +397,9 @@ export default {
 
   },
   methods: {
+    goPage(pageName) {
+      this.router.push({ name: pageName });
+    },
     handlePullDown(index) {
       if (index == 1) {
         if (this.$refs.condition1.style.overflow == "hidden") {
@@ -653,6 +664,7 @@ li {
   border-radius: 10px;
   border: 1px solid #aaa;
   background-color: white;
+  cursor: pointer;
 
   vertical-align: top;
 }

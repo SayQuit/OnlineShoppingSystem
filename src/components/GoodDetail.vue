@@ -102,11 +102,20 @@
 </template>
 
 <script>
+import { useRouter } from "vue-router";
 export default {
+  setup() {
+    const router = useRouter();
+    return {
+      router,
+    };
+  },
   methods: {
     handleChangeNum(num) {
       if (Number(num) + Number(this.$refs.num.value) >= 1)
         this.$refs.num.value = Number(num) + Number(this.$refs.num.value);
+    },goPage(pageName) {
+      this.router.push({ name: pageName });
     },
   },
 };
@@ -338,6 +347,7 @@ export default {
   background-color: #f95570;
   cursor: pointer;
 }
+
 .main-detail-cont-num {
   margin-top: 50px;
 }

@@ -1,13 +1,14 @@
 <template>
-  <good-detail></good-detail>
+  <!-- <router-view></router-view> -->
+  <settle-account></settle-account>
 </template>
 
 <script>
-import GoodDetail from './components/GoodDetail.vue';
+import SettleAccount from './components/SettleAccount.vue'
 export default {
   name: 'App',
   components: {
-    GoodDetail
+    SettleAccount
 
 }
 }
