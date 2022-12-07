@@ -18,18 +18,18 @@
           <table>
             <tr>
               <td><h1>昵称:</h1></td>
-              <td><input type="text" /></td>
-              <td><p class="input_success">昵称</p></td>
+              <td><input type="text"  v-model="name"/></td>
+              <!-- <td><p class="input_success">昵称</p></td> -->
             </tr>
 
 
             <tr>
               <td><h1>登陆密码:</h1></td>
-              <td><input type="text" /></td>
-              <td><p class="input_error">登陆密码格式不正确，请重新输入</p></td>
+              <td><input type="password"  v-model="psw"/></td>
+              <!-- <td><p class="input_error">登陆密码格式不正确，请重新输入</p></td> -->
             </tr>
 
-            <tr>
+            <!-- <tr>
               <td></td>
               <td class="safe">
                 <p>安全程度</p>
@@ -37,12 +37,12 @@
                 <p class="green safeBlock">中</p>
                 <p class="yellow safeBlock">强</p>
               </td>
-            </tr>
+            </tr> -->
 
             <tr>
               <td><h1>确认密码:</h1></td>
-              <td><input type="text" /></td>
-              <td><p class="input_error">确认密码格式不正确，请重新输入</p></td>
+              <td><input type="password"  v-model="makesurePsw"/></td>
+              <!-- <td><p class="input_error">确认密码格式不正确，请重新输入</p></td> -->
             </tr>
 
             <tr>
@@ -58,27 +58,110 @@
           </table>
         </div>
 
-        <div class="finishi">
-          <a href="#">完成注册</a>
+        <div class="finishi" @click="handleRegister">
+          完成注册
         </div>
       </div>
     </div>
 
 
 
-    <div class="footer">
+    <!-- <div class="footer">
       <div class="footer-main">
         <div class="footer-main-item">帮助</div>
         <div class="footer-main-item">隐私</div>
         <div class="footer-main-item">条款</div>
       </div>
       <div class="footer-copyright">copyright@2017蚂蚁金服体验技术部出品</div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-export default {};
+import { useRouter } from "vue-router";
+import axios from "axios";
+import { useStore } from "vuex";
+// axios.defaults.baseURL="/api"
+export default {
+  setup() {
+    const router = useRouter();
+    return {
+      router,
+    };
+  },
+  data() {
+    return {
+      name: "",
+      psw: "",
+      makesurePsw: "",
+    };
+  },
+  mounted() {
+    this.store = useStore();
+  },
+  methods: {
+    
+    goPage(pageName) {
+      this.router.push({ name: pageName });
+    },
+
+
+
+
+    // 注册请求
+    handleRegister() {
+      if (!this.name) {
+        // 条件判断
+        this.$message({
+          type: "error",
+          message: "昵称不能为空",
+        });
+        return;
+      } else if (!this.psw) {
+        this.$message({
+          type: "error",
+          message: "密码不能为空",
+        });
+        return;
+      } else if (this.psw !== this.makesurePsw) {
+        this.$message({
+          type: "error",
+          message: "两次输入的密码不一致",
+        });
+        return;
+      } else if (this.name.length > 20) {
+        this.$message({
+          type: "error",
+          message: "昵称长度太长",
+        });
+        return;
+      }
+      var reg = /^(?!([a-zA-Z]+|\d+)$)[a-zA-Z\d]{8,16}$/;
+      if (!reg.test(this.psw)) {
+        this.$message({
+          type: "error",
+          message:
+            "密码不符合要求,密码长度应为8到16位包含字母与数字,不能包含特殊字符",
+        });
+        return;
+      }
+
+      // 请求后端
+      let url =
+        "/api/register?username=" +
+        this.name +
+        "&password=" +
+        this.psw;
+        console.log(url);
+      axios.get(url).then((data) => {
+        console.log(data);
+      });
+    },
+
+
+  },
+
+};
 </script>
 
 <style scoped>

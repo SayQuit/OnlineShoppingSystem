@@ -6,8 +6,8 @@
         <div class="header-scut-url">WWW.SCUT.SHOPPING.COM</div>
       </div>
       <div class="header-search">
-        <input type="text" class="header-search-input" placeholder="请输入" />
-        <div class="header-search-click" @click="goPage('GoodList')">搜索</div>
+        <input type="text" class="header-search-input" placeholder="请输入"  v-model="keyword"/>
+        <div class="header-search-click" @click="gotoSearch('GoodList')">搜索</div>
       </div>
       <div class="header-car">购物车结算</div>
       <div class="header-login" @click="goPage('LoginPage')">登录</div>
@@ -185,14 +185,19 @@ import { useRouter } from "vue-router";
 export default {
   setup() {
     const router = useRouter();
+    let keyword=""
     return {
       router,
+      keyword
     };
   },
   methods: {
     goPage(pageName) {
       this.router.push({ name: pageName });
     },
+    gotoSearch(){
+      this.router.push({ name: "GoodList", params: {keyword: this.keyword } });
+    }
   },
 };
 </script>

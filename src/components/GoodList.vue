@@ -6,7 +6,7 @@
         <div class="header-scut-url">WWW.SCUT.SHOPPING.COM</div>
       </div>
       <div class="header-search">
-        <input type="text" class="header-search-input" placeholder="请输入" />
+        <input type="text" class="header-search-input" placeholder="请输入"  v-model="keyword"/>
         <div class="header-search-click">搜索</div>
       </div>
       <div class="header-car">购物车结算</div>
@@ -355,7 +355,7 @@
           <div class="goods-item-price">￥200</div>
         </div>
 
-        <div class="page">
+        <!-- <div class="page">
           <span class="page-num">&lt;</span>
           <span class="page-num page-choosenum">1</span>
           <span class="page-num">2</span>
@@ -371,14 +371,15 @@
             <input type="number" class="page-input" />
             <span>页</span>
           </span>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
+import axios from "axios";
+import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 export default {
   setup() {
@@ -388,17 +389,36 @@ export default {
     };
   },
   data() {
-    return {};
+    return {
+      list:[],
+      keyword:""
+    };
   },
   mounted(){
     this.$refs.condition1.style.overflow = "hidden"
     this.$refs.condition2.style.overflow = "hidden"
     this.$refs.condition3.style.overflow = "hidden"
 
+    this.keyword = this.$route.params.keyword;
+    console.log('keyword',this.keyword);
+    console.log(this.store );
+
   },
+  beforeMount() {
+    this.store = useStore();
+    this.getList()
+  },
+  
   methods: {
     goPage(pageName) {
       this.router.push({ name: pageName });
+    },
+    getList(){
+      let url =
+        "api/index/queryGoods?pageNo=1";
+      axios.get(url).then((data) => {
+        console.log(data);
+      });
     },
     handlePullDown(index) {
       if (index == 1) {

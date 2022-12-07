@@ -82,6 +82,23 @@
       </div>
 
     </div>
+    <div class="page">
+          <span class="page-num">&lt;</span>
+          <span class="page-num page-choosenum">1</span>
+          <span class="page-num">2</span>
+          <span class="page-num">3</span>
+          <span class="page-num">4</span>
+          <span class="page-num">5</span>
+          <span class="page-num">6</span>
+          <span class="page-num">7</span>
+          <span class="page-num">8</span>
+          <span class="page-num">></span>
+          <span>
+            <span>跳至</span>
+            <input type="number" class="page-input" />
+            <span>页</span>
+          </span>
+        </div>
 
     <div class="footer">
       <div class="footer-main">
@@ -95,7 +112,38 @@
 </template>
 
 <script>
-export default {};
+import { useRouter } from "vue-router";
+import axios from "axios";
+import { useStore } from "vuex";
+export default {
+  setup() {
+    const router = useRouter();
+    return {
+      router,
+    };
+  },
+  data() {
+    return {
+      list:[]
+    };
+  },
+  beforeMount() {
+    this.store = useStore();
+    this.getList()
+  },
+  mounted() {
+
+  },
+  methods: {
+    getList(){
+      let url =
+        "api/index/queryGoods?pageNo=1";
+      axios.get(url).then((data) => {
+        console.log(data);
+      });
+    }
+  },
+};
 </script>
 
 <style>
@@ -263,5 +311,40 @@ export default {};
 .footer-copyright {
   width: 100%;
   text-align: center;
+}
+.page {
+  padding: 50px 0;
+  display: block;
+  margin: 0 auto;
+  width: fit-content;
+}
+.page-num {
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  display: inline-block;
+  font-size: 16px;
+  line-height: 40px;
+  text-align: center;
+  border: 1px solid #888;
+  border-radius: 10px;
+  margin: 0 6px;
+  color: #444;
+  cursor: pointer;
+}
+.page .page-choosenum {
+  background-color: #349efa;
+  color: white;
+  border: none;
+}
+.page span {
+  font-size: 16px;
+}
+.page-input {
+  width: 50px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #888;
+  margin: 0 4px;
 }
 </style>
