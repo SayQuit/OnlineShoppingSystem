@@ -273,87 +273,15 @@
       </div>
 
       <div class="goods bgrwhite">
-        <div class="goods-item" @click="goPage('GoodDetail')">
+        <template v-for="item in list" :key="item">
+        <div class="goods-item" @click="gotoDetail(item)">
           <div class="goods-item-image">
-            <img src="../assets/good.jpg" class="mid" />
+            <img :src="item.logo" class="mid" />
           </div>
-          <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-          <div class="goods-item-price">￥200</div>
+          <div class="goods-item-desc">{{item.name}}</div>
+          <div class="goods-item-price">￥{{item.price}}</div>
         </div>
-
-        <div class="goods-item">
-          <div class="goods-item-image">
-            <img src="../assets/good.jpg" class="mid" />
-          </div>
-          <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-          <div class="goods-item-price">￥200</div>
-        </div>
-
-        <div class="goods-item">
-          <div class="goods-item-image">
-            <img src="../assets/good.jpg" class="mid" />
-          </div>
-          <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-          <div class="goods-item-price">￥200</div>
-        </div>
-
-        <div class="goods-item">
-          <div class="goods-item-image">
-            <img src="../assets/good.jpg" class="mid" />
-          </div>
-          <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-          <div class="goods-item-price">￥200</div>
-        </div>
-
-        <div class="goods-item">
-          <div class="goods-item-image">
-            <img src="../assets/good.jpg" class="mid" />
-          </div>
-          <div class="goods-item-desc">
-            OLAY玉兰油OLAY玉兰油OLAY玉兰油OLAY玉兰油OLAY玉兰油OLAY玉兰油OLAY玉兰油OLAY玉兰油OLAY玉兰油OLAY玉兰油OLAY玉兰油OLAY玉兰油
-          </div>
-          <div class="goods-item-price">￥200</div>
-        </div>
-
-        <div class="goods-item">
-          <div class="goods-item-image">
-            <img src="../assets/good.jpg" class="mid" />
-          </div>
-          <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-          <div class="goods-item-price">￥200</div>
-        </div>
-
-        <div class="goods-item">
-          <div class="goods-item-image">
-            <img src="../assets/good.jpg" class="mid" />
-          </div>
-          <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-          <div class="goods-item-price">￥200</div>
-        </div>
-
-        <div class="goods-item">
-          <div class="goods-item-image">
-            <img src="../assets/good.jpg" class="mid" />
-          </div>
-          <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-          <div class="goods-item-price">￥200</div>
-        </div>
-
-        <div class="goods-item">
-          <div class="goods-item-image">
-            <img src="../assets/good.jpg" class="mid" />
-          </div>
-          <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-          <div class="goods-item-price">￥200</div>
-        </div>
-
-        <div class="goods-item">
-          <div class="goods-item-image">
-            <img src="../assets/good.jpg" class="mid" />
-          </div>
-          <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-          <div class="goods-item-price">￥200</div>
-        </div>
+      </template>
 
         <!-- <div class="page">
           <span class="page-num">&lt;</span>
@@ -400,8 +328,8 @@ export default {
     this.$refs.condition3.style.overflow = "hidden"
 
     this.keyword = this.$route.params.keyword;
-    console.log('keyword',this.keyword);
-    console.log(this.store );
+    // console.log('keyword',this.keyword);
+    // console.log(this.store );
 
   },
   beforeMount() {
@@ -413,11 +341,19 @@ export default {
     goPage(pageName) {
       this.router.push({ name: pageName });
     },
+    gotoDetail(item){
+      console.log(JSON.stringify(item));
+      this.router.push({ name: "GoodDetail" , params: {good:JSON.stringify(item) }});
+    },
     getList(){
+      // console.log(`api/index/queryGoods?pageNo=1&goodsName=${this.keyword}`);
       let url =
-        "api/index/queryGoods?pageNo=1";
+        `api/index/queryGoods?pageNo=0&goodsName=${this.keyword}`;
       axios.get(url).then((data) => {
-        console.log(data);
+        if (data.data.code == 200) {
+          this.list = data.data.result;
+        }
+        // console.log(this.list);
       });
     },
     handlePullDown(index) {

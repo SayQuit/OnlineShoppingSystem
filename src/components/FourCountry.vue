@@ -32,73 +32,37 @@
       </div>
     </div>
 
-    <div class="goods">
-      <div class="goods-item">
-        <div class="goods-item-image">
-          <img src="../assets/good.jpg" class="mid" />
+    <div class="goods" @click="goPage('GoodDetail')">
+      <template v-for="item in list" :key="item">
+        <div class="goods-item">
+          <div class="goods-item-image">
+            <img :src="item.logo" class="mid" />
+          </div>
+          <div class="goods-item-desc">{{item.name}}</div>
+          <div class="goods-item-price">￥{{item.price}}</div>
         </div>
-        <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-        <div class="goods-item-price">￥200</div>
-      </div>
-
-      <div class="goods-item">
-        <div class="goods-item-image">
-          <img src="../assets/good.jpg" class="mid" />
-        </div>
-        <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-        <div class="goods-item-price">￥200</div>
-      </div>
-
-      <div class="goods-item">
-        <div class="goods-item-image">
-          <img src="../assets/good.jpg" class="mid" />
-        </div>
-        <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-        <div class="goods-item-price">￥200</div>
-      </div>
-
-      <div class="goods-item">
-        <div class="goods-item-image">
-          <img src="../assets/good.jpg" class="mid" />
-        </div>
-        <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-        <div class="goods-item-price">￥200</div>
-      </div>
-
-      <div class="goods-item">
-        <div class="goods-item-image">
-          <img src="../assets/good.jpg" class="mid" />
-        </div>
-        <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-        <div class="goods-item-price">￥200</div>
-      </div>
-
-      <div class="goods-item">
-        <div class="goods-item-image">
-          <img src="../assets/good.jpg" class="mid" />
-        </div>
-        <div class="goods-item-desc">OLAY玉兰油OLAY玉兰油OLAY玉兰油</div>
-        <div class="goods-item-price">￥200</div>
-      </div>
-
+      </template>
     </div>
+
+
+
     <div class="page">
-          <span class="page-num">&lt;</span>
-          <span class="page-num page-choosenum">1</span>
-          <span class="page-num">2</span>
-          <span class="page-num">3</span>
-          <span class="page-num">4</span>
-          <span class="page-num">5</span>
-          <span class="page-num">6</span>
-          <span class="page-num">7</span>
-          <span class="page-num">8</span>
-          <span class="page-num">></span>
-          <span>
-            <span>跳至</span>
-            <input type="number" class="page-input" />
-            <span>页</span>
-          </span>
-        </div>
+      <span class="page-num">&lt;</span>
+      <span class="page-num page-choosenum">1</span>
+      <span class="page-num">2</span>
+      <span class="page-num">3</span>
+      <span class="page-num">4</span>
+      <span class="page-num">5</span>
+      <span class="page-num">6</span>
+      <span class="page-num">7</span>
+      <span class="page-num">8</span>
+      <span class="page-num">></span>
+      <span>
+        <span>跳至</span>
+        <input type="number" class="page-input" />
+        <span>页</span>
+      </span>
+    </div>
 
     <div class="footer">
       <div class="footer-main">
@@ -124,24 +88,27 @@ export default {
   },
   data() {
     return {
-      list:[]
+      list: [],
     };
   },
   beforeMount() {
     this.store = useStore();
-    this.getList()
+    this.getList();
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
-    getList(){
-      let url =
-        "api/index/queryGoods?pageNo=1";
+    goPage(pageName) {
+      this.router.push({ name: pageName });
+    },
+    getList() {
+      let url = "api/index/queryGoods?pageNo=0";
       axios.get(url).then((data) => {
-        console.log(data);
+        if (data.data.code == 200) {
+          this.list = data.data.result;
+        }
+        // console.log(this.list);
       });
-    }
+    },
   },
 };
 </script>
@@ -201,7 +168,7 @@ export default {
   width: 80px;
   text-align: center;
   line-height: 40px;
-  background-color: #349EFA;
+  background-color: #349efa;
   color: white;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -217,8 +184,8 @@ export default {
   text-align: center;
   vertical-align: top;
   border-radius: 5px;
-  border: 1px solid #349EFA;
-  color: #349EFA;
+  border: 1px solid #349efa;
+  color: #349efa;
 }
 .header-login {
   display: inline-block;
@@ -277,15 +244,14 @@ export default {
 .goods-item .goods-item-image img {
   height: 100%;
 }
-.goods-item-desc{
+.goods-item-desc {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   margin: 20px 0 10px;
-  
 }
-.goods-item-price{
-  color: #CE0000;
+.goods-item-price {
+  color: #ce0000;
   font-size: 18px;
 }
 .footer {

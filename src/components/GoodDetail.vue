@@ -17,7 +17,7 @@
     <div class="main bgrcolor">
       <div class="main-shop bgrwhite">
         <div class="main-shop-name">
-          <div>XX购物商店</div>
+          <div>213宿舍购物商店</div>
         </div>
         <div class="main-shop-evaluate">
           <div class="main-shop-evaluate-block mid">
@@ -41,15 +41,14 @@
       </div>
       <div class="main-detail bgrwhite">
         <div class="main-detail-img">
-          <img src="../assets/ty.jpg" class="mid" style="max-height: 80%" />
+          <img :src="detail.logo" class="mid" style="height: 80%;width: 80%;" />
         </div>
         <div class="main-detail-cont">
           <div class="main-detail-cont-title">
-            全球通史 从史前史到21世纪（ 第7版 修订版 中文版
-            套装上下册）（赠送精美地图）
+            {{detail.name}}
           </div>
           <div class="main-detail-cont-sell">销量:193</div>
-          <div class="main-detail-cont-price">￥699</div>
+          <div class="main-detail-cont-price">￥{{detail.price}}</div>
           <div class="main-detail-cont-num">
             <div @click="handleChangeNum(-1)">-</div>
             <input type="number" value="1" ref="num" min="1" />
@@ -109,6 +108,17 @@ export default {
     return {
       router,
     };
+    
+  },
+  data() {
+    return {
+      detail:{}
+    }
+  },
+  mounted(){
+    // console.log(this.$route.params);
+    this.detail = JSON.parse(this.$route.params.good);
+    // console.log(this.detail);
   },
   methods: {
     handleChangeNum(num) {
@@ -303,6 +313,7 @@ export default {
 .main-detail-img {
   flex: 1;
   position: relative;
+  
 }
 
 .main-detail-cont {
