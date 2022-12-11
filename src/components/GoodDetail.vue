@@ -23,7 +23,7 @@
           <div class="main-shop-evaluate-block mid">
             <div class="main-shop-evaluate-block-item">
               <div>宝贝描述</div>
-              <div>9.8</div>
+              <div>9.6</div>
             </div>
             <div class="main-shop-evaluate-block-item">
               <div>卖家服务</div>
@@ -31,7 +31,7 @@
             </div>
             <div class="main-shop-evaluate-block-item">
               <div>物流服务</div>
-              <div>9.8</div>
+              <div>9.7</div>
             </div>
           </div>
         </div>
@@ -41,21 +41,23 @@
       </div>
       <div class="main-detail bgrwhite">
         <div class="main-detail-img">
-          <img :src="detail.logo" class="mid" style="height: 80%;width: 80%;" />
+          <img :src="detail.logo" class="mid" style="height: 80%; width: 80%" />
         </div>
         <div class="main-detail-cont">
           <div class="main-detail-cont-title">
-            {{detail.name}}
+            {{ detail.name }}
           </div>
           <div class="main-detail-cont-sell">销量:193</div>
-          <div class="main-detail-cont-price">￥{{detail.price}}</div>
+          <div class="main-detail-cont-price">￥{{ detail.price }}</div>
           <div class="main-detail-cont-num">
             <div @click="handleChangeNum(-1)">-</div>
-            <input type="number" value="1" ref="num" min="1" />
+            <div style="background: #ddd">{{ number }}</div>
             <div @click="handleChangeNum(1)">+</div>
           </div>
           <div class="main-detail-cont-opration">
-            <div class="main-detail-cont-opration-add">加入购物车</div>
+            <div class="main-detail-cont-opration-add" @click="handlePostCar">
+              加入购物车
+            </div>
             <div class="main-detail-cont-opration-buy">购买</div>
           </div>
         </div>
@@ -102,35 +104,86 @@
 
 <script>
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import axios from "axios";
+// import qs from "qs";
 export default {
   setup() {
     const router = useRouter();
     return {
       router,
     };
-    
   },
   data() {
     return {
-      detail:{}
-    }
+      detail: {},
+      number: 1,
+    };
   },
-  mounted(){
-    // console.log(this.$route.params);
+  mounted() {
+    console.log(this.$route.params);
     this.detail = JSON.parse(this.$route.params.good);
+    this.store = useStore();
+
     // console.log(this.detail);
   },
   methods: {
     handleChangeNum(num) {
-      if (Number(num) + Number(this.$refs.num.value) >= 1)
-        this.$refs.num.value = Number(num) + Number(this.$refs.num.value);
-    },goPage(pageName) {
+      if (num + this.number >= 1 || num + this.number <= this.detail.number) {
+        num + this.number;
+      }
+    },
+    goPage(pageName) {
       this.router.push({ name: pageName });
+    },
+    handlePostCar() {
+      // console.log(this.detail);
+      let good = {
+        Amount: JSON.stringify(this.detail.price * this.number),
+        itemCount: JSON.stringify(this.number),
+        goodsName: JSON.stringify(this.detail.name),
+        goodsId: JSON.stringify(this.detail.id),
+      };
+      let id = this.store.state.userInfo.id;
+      let data={
+        goods:JSON.stringify(good),
+        userId:id,
+      }
+      // let url = `api/shoppingcart/addGoodsItem`;
+
+      axios
+        .post("api/shoppingcart/addGoodsItem",  data ) //传参
+        .then(function (res) {
+          console.log(res);
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+
+      // axios({
+      //   url,
+      //   data: {
+      //     goods:qs.stringify(good),
+      //     userId:id
+      //   },
+      //   method: "post",
+
+      // }).then((res) => {
+      //   console.log(res);
+      // });
+
+      // axios
+      //   .post(url)
+      //   .then((data) => {
+      //     {
+      //       console.log(data);
+      //     }
+      //     // console.log(this.list);
+      //   });
     },
   },
 };
 </script>
-
 <style>
 .comment {
   width: 1300px;
@@ -313,7 +366,6 @@ export default {
 .main-detail-img {
   flex: 1;
   position: relative;
-  
 }
 
 .main-detail-cont {

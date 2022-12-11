@@ -139,6 +139,7 @@ export default {
         "&password=" +
         this.psw;
       axios.post(url).then((data) => {
+        console.log(data);
         if(data.data.code==1000){
           this.store.commit("handleChangeUser", data.data.result);
           this.store.commit("handleChangeToken", data.data.msg);

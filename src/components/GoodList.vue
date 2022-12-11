@@ -342,7 +342,7 @@ export default {
       this.router.push({ name: pageName });
     },
     gotoDetail(item){
-      console.log(JSON.stringify(item));
+      // console.log(JSON.stringify(item));
       this.router.push({ name: "GoodDetail" , params: {good:JSON.stringify(item) }});
     },
     getList(){

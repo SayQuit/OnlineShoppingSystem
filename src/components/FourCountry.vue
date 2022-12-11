@@ -32,9 +32,9 @@
       </div>
     </div>
 
-    <div class="goods" @click="goPage('GoodDetail')">
+    <div class="goods">
       <template v-for="item in list" :key="item">
-        <div class="goods-item">
+        <div class="goods-item" @click="gotoDetail(item)">
           <div class="goods-item-image">
             <img :src="item.logo" class="mid" />
           </div>
@@ -100,13 +100,19 @@ export default {
     goPage(pageName) {
       this.router.push({ name: pageName });
     },
+    gotoDetail(item){
+      // console.log(JSON.stringify(item));
+      this.router.push({ name: "GoodDetail" , params: {good:JSON.stringify(item) }});
+    },
     getList() {
       let url = "api/index/queryGoods?pageNo=0";
       axios.get(url).then((data) => {
         if (data.data.code == 200) {
           this.list = data.data.result;
         }
-        // console.log(this.list);
+        console.log(this.list);
+        // let url=`/shoppingcart/addGoodsItem?goods=${this.list}`
+        // console.log(url);
       });
     },
   },
