@@ -8,9 +8,9 @@
       <div class="registerBlock">
         <div class="registerTitle">
           <h1>注册新用户</h1>
-          <div>
+          <div @click="goPage('LoginPage')">
             <p>已有帐号,去</p>
-            <a href="#">登录</a>
+            <a style="cursor: pointer">登录</a>
           </div>
         </div>
 
@@ -18,14 +18,13 @@
           <table>
             <tr>
               <td><h1>昵称:</h1></td>
-              <td><input type="text"  v-model="name"/></td>
+              <td><input type="text" v-model="name" /></td>
               <!-- <td><p class="input_success">昵称</p></td> -->
             </tr>
 
-
             <tr>
               <td><h1>登陆密码:</h1></td>
-              <td><input type="password"  v-model="psw"/></td>
+              <td><input type="password" v-model="psw" /></td>
               <!-- <td><p class="input_error">登陆密码格式不正确，请重新输入</p></td> -->
             </tr>
 
@@ -41,7 +40,7 @@
 
             <tr>
               <td><h1>确认密码:</h1></td>
-              <td><input type="password"  v-model="makesurePsw"/></td>
+              <td><input type="password" v-model="makesurePsw" /></td>
               <!-- <td><p class="input_error">确认密码格式不正确，请重新输入</p></td> -->
             </tr>
 
@@ -49,22 +48,21 @@
               <td></td>
               <td>
                 <div class="protocal">
-                  <input type="checkbox" />
+                  <input type="checkbox" v-model="allow"/>
                   <p>同意协议并注册</p>
-                  <a href="https://cdn.awsbj0.fds.api.mi-img.com/huami-amazfit-production/0_agreements/zh-CNAgreement-20170809.html">《知晓用户协议》</a>
+                  <a
+                    href="https://cdn.awsbj0.fds.api.mi-img.com/huami-amazfit-production/0_agreements/zh-CNAgreement-20170809.html" target="_black"
+                    >《知晓用户协议》</a
+                  >
                 </div>
               </td>
             </tr>
           </table>
         </div>
 
-        <div class="finishi" @click="handleRegister">
-          完成注册
-        </div>
+        <div class="finishi" @click="handleRegister">完成注册</div>
       </div>
     </div>
-
-
 
     <!-- <div class="footer">
       <div class="footer-main">
@@ -94,19 +92,16 @@ export default {
       name: "",
       psw: "",
       makesurePsw: "",
+      allow:false
     };
   },
   mounted() {
     this.store = useStore();
   },
   methods: {
-    
     goPage(pageName) {
       this.router.push({ name: pageName });
     },
-
-
-
 
     // 注册请求
     handleRegister() {
@@ -145,22 +140,32 @@ export default {
         });
         return;
       }
+      if(!this.allow){
+        this.$message({
+            type: "success",
+            message: "未同意用户协议",
+          });
+      }
 
       // 请求后端
-      let url =
-        "/api/register?username=" +
-        this.name +
-        "&password=" +
-        this.psw;
-        console.log(url);
+      let url = "/api/register?username=" + this.name + "&password=" + this.psw;
       axios.get(url).then((data) => {
         console.log(data);
+        if (data.data == 1) {
+          this.$message({
+            type: "success",
+            message: "注册成功",
+          });
+          this.goPage("MainPage");
+        } else {
+          this.$message({
+            type: "success",
+            message: "注册失败",
+          });
+        }
       });
     },
-
-
   },
-
 };
 </script>
 
@@ -366,7 +371,7 @@ table {
 }
 
 .redline {
-  background-color: #349EFA;
+  background-color: #349efa;
   height: 3px;
 }
 
@@ -493,7 +498,7 @@ table {
 }
 .registerTitle > div > a {
   display: inline-block;
-  color: #349EFA;
+  color: #349efa;
   font-size: 14px;
 }
 
@@ -567,8 +572,9 @@ input {
 .finishi {
   width: 200px;
   height: 35px;
+  cursor: pointer;
 
-  background-color: #349EFA;
+  background-color: #349efa;
 
   text-align: center;
   line-height: 35px;

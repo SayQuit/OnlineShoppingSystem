@@ -1,15 +1,22 @@
 <template>
   <div class="mainPage">
     <div class="header">
-      <div class="header-scut">
+      <div class="header-scut" @click="goPage('MainPage')">
         <div class="header-scut-name">华工在线购物</div>
         <div class="header-scut-url">WWW.SCUT.SHOPPING.COM</div>
       </div>
       <div class="header-search">
-        <input type="text" class="header-search-input" placeholder="请输入"  v-model="keyword"/>
-        <div class="header-search-click" @click="gotoSearch('GoodList')">搜索</div>
+        <input
+          type="text"
+          class="header-search-input"
+          placeholder="请输入"
+          v-model="keyword"
+        />
+        <div class="header-search-click" @click="gotoSearch('GoodList')">
+          搜索
+        </div>
       </div>
-      <div class="header-car">购物车结算</div>
+      <div class="header-car" @click="goPage('CarPage')">购物车结算</div>
       <div class="header-login" @click="goPage('LoginPage')">登录</div>
       <div class="header-register" @click="goPage('RegisterPage')">注册</div>
     </div>
@@ -85,16 +92,35 @@
                 src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
               />
             </div>
-            <div class="main-user-profile-desc">你好呀!SCUTer~</div>
+            <div class="main-user-profile-desc" v-if="user == null">
+              你好呀!SCUTer~
+            </div>
+            <div class="main-user-profile-desc" v-else>
+              你好呀!{{ user.username }}
+            </div>
           </div>
           <div></div>
         </div>
         <div class="main-user-operation">
           <div class="main-user-operation-login">
-            <div class="main-user-operation-login-button mid" @click="goPage('LoginPage')">登录</div>
+            <div
+              class="main-user-operation-login-button mid"
+              @click="goPage('LoginPage')"
+            >
+              <div style="width: fit-content; height: fit-content" class="mid">
+                登录
+              </div>
+            </div>
           </div>
           <div class="main-user-operation-register">
-            <div class="main-user-operation-register-button mid" @click="goPage('RegisterPage')">注册</div>
+            <div
+              class="main-user-operation-register-button mid"
+              @click="goPage('RegisterPage')"
+            >
+              <div style="width: fit-content; height: fit-content" class="mid">
+                注册
+              </div>
+            </div>
           </div>
         </div>
         <div class="main-user-nav">
@@ -182,22 +208,34 @@
   
   <script>
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 export default {
   setup() {
     const router = useRouter();
-    let keyword=""
+    let keyword = "";
     return {
       router,
-      keyword
+      keyword,
     };
+  },
+  data() {
+    return {
+      user: null,
+    };
+  },
+  mounted() {
+    this.store = useStore();
+    console.log(this.store.state);
+    this.user = this.store.state.userInfo;
+    console.log(this.store.state);
   },
   methods: {
     goPage(pageName) {
       this.router.push({ name: pageName });
     },
-    gotoSearch(){
-      this.router.push({ name: "GoodList", params: {keyword: this.keyword } });
-    }
+    gotoSearch() {
+      this.router.push({ name: "GoodList", params: { keyword: this.keyword } });
+    },
   },
 };
 </script>
@@ -217,6 +255,7 @@ export default {
   margin-left: 150px;
   width: 200px;
   display: inline-block;
+  cursor: pointer;
 }
 .header-scut-name {
   font-size: 30px;
@@ -226,6 +265,7 @@ export default {
   width: 100%;
   text-align: center;
   margin-top: 10px;
+  cursor: pointer;
 }
 
 .header-search {
@@ -270,6 +310,7 @@ export default {
   border-radius: 5px;
   border: 1px solid #349efa;
   color: #349efa;
+  cursor: pointer;
 }
 .header-login {
   display: inline-block;
@@ -479,6 +520,7 @@ export default {
 }
 .main-user-nav-item {
   flex: 1;
+  cursor: pointer;
 }
 .main-user-nav-item-image {
   position: relative;

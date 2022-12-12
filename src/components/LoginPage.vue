@@ -18,13 +18,13 @@
           <table>
             <tr>
               <td><h1>昵称:</h1></td>
-              <td><input type="text"  v-model="name"/></td>
+              <td><input type="text" v-model="name" /></td>
               <!--              <td><p class="input_success">昵称</p></td>-->
             </tr>
 
             <tr>
               <td><h1>登陆密码:</h1></td>
-              <td><input type="password"  v-model="psw"/></td>
+              <td><input type="password" v-model="psw" /></td>
               <!--              <td><p class="input_error">登陆密码格式不正确，请重新输入</p></td>-->
             </tr>
 
@@ -57,9 +57,7 @@
           </table>
         </div>
 
-        <div class="finishi" @click="handleLogin">
-          登录
-        </div>
+        <div class="finishi" @click="handleLogin">登录</div>
       </div>
     </div>
 
@@ -101,7 +99,6 @@ export default {
       this.router.push({ name: pageName });
     },
 
-
     // 登录请求函数
     handleLogin() {
       // 条件判断
@@ -133,20 +130,24 @@ export default {
       // }
 
       // 发出请求
-      let url =
-        "/api/login?username=" +
-        this.name +
-        "&password=" +
-        this.psw;
+      let url = "/api/login?username=" + this.name + "&password=" + this.psw;
       axios.post(url).then((data) => {
         console.log(data);
-        if(data.data.code==1000){
+        if (data.data.code == 1000) {
           this.store.commit("handleChangeUser", data.data.result);
           this.store.commit("handleChangeToken", data.data.msg);
-
-          this.goPage('MainPage')
+          this.$message({
+            type: "success",
+            message: "登录成功",
+          });
+          this.goPage("MainPage");
         }
-
+        else{
+          this.$message({
+          type: "error",
+          message: "登录失败",
+        });
+        }
       });
     },
   },
@@ -563,6 +564,7 @@ input {
   line-height: 35px;
   color: white;
 
+  cursor: pointer;
   margin: 0 auto;
 }
 .finishi a {

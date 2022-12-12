@@ -1,17 +1,17 @@
 <template>
   <div class="goodDetail">
     <div class="header">
-      <div class="header-scut">
+      <div class="header-scut" @click="goPage('MainPage')">
         <div class="header-scut-name">华工在线购物</div>
         <div class="header-scut-url">WWW.SCUT.SHOPPING.COM</div>
       </div>
       <div class="header-search">
-        <input type="text" class="header-search-input" placeholder="请输入" />
-        <div class="header-search-click">搜索</div>
+        <input type="text" class="header-search-input" placeholder="请输入"  v-model="keyword"/>
+        <div class="header-search-click" @click="gotoSearch('GoodList')">搜索</div>
       </div>
-      <div class="header-car">购物车结算</div>
-      <div class="header-login">登录</div>
-      <div class="header-register">注册</div>
+      <div class="header-car" @click="goPage('CarPage')">购物车结算</div>
+      <div class="header-login" @click="goPage('LoginPage')">登录</div>
+      <div class="header-register" @click="goPage('RegisterPage')">注册</div>
     </div>
 
     <div class="main bgrcolor">
@@ -106,7 +106,7 @@
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import axios from "axios";
-// import qs from "qs";
+import qs from "qs";
 export default {
   setup() {
     const router = useRouter();
@@ -139,20 +139,25 @@ export default {
     handlePostCar() {
       // console.log(this.detail);
       let good = {
-        Amount: JSON.stringify(this.detail.price * this.number),
+        Amount: this.detail.price * this.number,
         itemCount: JSON.stringify(this.number),
-        goodsName: JSON.stringify(this.detail.name),
-        goodsId: JSON.stringify(this.detail.id),
+        goodsName: this.detail.name,
+        goodsId: this.detail.id,
       };
       let id = this.store.state.userInfo.id;
-      let data={
-        goods:JSON.stringify(good),
-        userId:id,
-      }
-      // let url = `api/shoppingcart/addGoodsItem`;
+      let data = {
+        goods: JSON.stringify(good),
+        userId: id,
+      };
+      let url = `api/shoppingcart/addGoodsItem`;
+      console.log(url);
+      console.log(qs.stringify(data));
 
-      axios
-        .post("api/shoppingcart/addGoodsItem",  data ) //传参
+      axios({
+        url: url,
+        data: good,
+        method: "post",
+      }) //传参
         .then(function (res) {
           console.log(res);
         })
@@ -181,6 +186,9 @@ export default {
       //     // console.log(this.list);
       //   });
     },
+    gotoSearch(){
+      this.router.push({ name: "GoodList", params: {keyword: this.keyword } });
+    }
   },
 };
 </script>
@@ -205,7 +213,7 @@ export default {
   width: 1440px;
 }
 .bgrcolor {
-  background-color: #f0f2f5;
+  background-color: white;
 }
 .bgrwhite {
   background-color: white;
@@ -219,6 +227,7 @@ export default {
   margin-left: 150px;
   width: 200px;
   display: inline-block;
+  cursor: pointer;
 }
 .header-scut-name {
   font-size: 30px;
@@ -228,6 +237,7 @@ export default {
   width: 100%;
   text-align: center;
   margin-top: 10px;
+  cursor: pointer;
 }
 
 .header-search {
@@ -258,6 +268,8 @@ export default {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   vertical-align: top;
+
+  cursor: pointer;
 }
 .header-car {
   display: inline-block;
@@ -271,6 +283,7 @@ export default {
   border-radius: 5px;
   border: 1px solid #349efa;
   color: #349efa;
+  cursor: pointer;
 }
 .header-login {
   display: inline-block;
@@ -280,6 +293,7 @@ export default {
   line-height: 25px;
   text-align: center;
   vertical-align: top;
+  cursor: pointer;
 }
 .header-register {
   display: inline-block;
@@ -289,6 +303,7 @@ export default {
   line-height: 25px;
   text-align: center;
   vertical-align: top;
+  cursor: pointer;
 }
 .main {
   width: 100%;

@@ -1,17 +1,17 @@
 <template>
   <div class="goodList">
     <div class="header">
-      <div class="header-scut">
+      <div class="header-scut" @click="goPage('MainPage')">
         <div class="header-scut-name">华工在线购物</div>
         <div class="header-scut-url">WWW.SCUT.SHOPPING.COM</div>
       </div>
       <div class="header-search">
         <input type="text" class="header-search-input" placeholder="请输入"  v-model="keyword"/>
-        <div class="header-search-click">搜索</div>
+        <div class="header-search-click" @click="gotoSearch('GoodList')">搜索</div>
       </div>
-      <div class="header-car">购物车结算</div>
-      <div class="header-login">登录</div>
-      <div class="header-register">注册</div>
+      <div class="header-car" @click="goPage('CarPage')">购物车结算</div>
+      <div class="header-login" @click="goPage('LoginPage')">登录</div>
+      <div class="header-register" @click="goPage('RegisterPage')">注册</div>
     </div>
 
     <div class="bgrcolor" style="height: 1460px">
@@ -400,6 +400,9 @@ export default {
         }
       }
     },
+    gotoSearch(){
+      this.router.push({ name: "GoodList", params: {keyword: this.keyword } });
+    }
   },
 };
 </script>
@@ -420,7 +423,8 @@ li {
 .header-scut {
   margin-left: 150px;
   width: 200px;
-  display: inline-block;
+  display: inline-block;  
+  cursor: pointer;
 }
 .header-scut-name {
   font-size: 30px;
@@ -430,6 +434,7 @@ li {
   width: 100%;
   text-align: center;
   margin-top: 10px;
+  cursor: pointer;
 }
 
 .header-search {
@@ -460,6 +465,7 @@ li {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   vertical-align: top;
+  cursor: pointer;
 }
 .header-car {
   display: inline-block;
@@ -473,6 +479,7 @@ li {
   border-radius: 5px;
   border: 1px solid #349efa;
   color: #349efa;
+  cursor: pointer;
 }
 .header-login {
   display: inline-block;
@@ -482,6 +489,7 @@ li {
   line-height: 25px;
   text-align: center;
   vertical-align: top;
+  cursor: pointer;
 }
 .header-register {
   display: inline-block;
@@ -491,6 +499,7 @@ li {
   line-height: 25px;
   text-align: center;
   vertical-align: top;
+  cursor: pointer;
 }
 
 .condition {
@@ -596,7 +605,7 @@ li {
   overflow: hidden;
 }
 .bgrcolor {
-  background-color: #f0f2f5;
+  background-color: white;
 }
 .bgrwhite {
   background-color: white;
@@ -618,7 +627,8 @@ li {
   box-sizing: border-box;
   margin: 1%;
   border-radius: 10px;
-  border: 1px solid #aaa;
+  border: 1px solid #DDD;
+  box-shadow: 4px 4px 20px -8px rgba(0, 0, 0, 0.25);
   background-color: white;
   cursor: pointer;
 
