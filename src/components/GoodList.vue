@@ -9,9 +9,29 @@
         <input type="text" class="header-search-input" placeholder="请输入"  v-model="keyword"/>
         <div class="header-search-click" @click="gotoSearch('GoodList')">搜索</div>
       </div>
-      <div class="header-car" @click="goPage('CarPage')">购物车结算</div>
-      <div class="header-login" @click="goPage('LoginPage')">登录</div>
-      <div class="header-register" @click="goPage('RegisterPage')">注册</div>
+      
+      <div class="header-car" @click="gotoCar()">购物车结算</div>
+
+
+
+      <div
+        class="header-login"
+        @click="goPage('LoginPage')"
+        v-if="user == null"
+      >
+        登录
+      </div>
+      <div class="header-login" v-else>{{ user.username }}的订单</div>
+      <div
+        class="header-register"
+        @click="goPage('RegisterPage')"
+        v-if="user == null"
+      >
+        注册
+      </div>
+
+
+
     </div>
 
     <div class="bgrcolor" style="height: 1460px">
@@ -319,7 +339,9 @@ export default {
   data() {
     return {
       list:[],
-      keyword:""
+      keyword:"",
+      categoryName:"",
+      user: null,
     };
   },
   mounted(){
@@ -328,12 +350,14 @@ export default {
     this.$refs.condition3.style.overflow = "hidden"
 
     this.keyword = this.$route.params.keyword;
+
     // console.log('keyword',this.keyword);
     // console.log(this.store );
 
   },
   beforeMount() {
     this.store = useStore();
+    this.user = this.store.state.userInfo;
     this.getList()
   },
   
@@ -341,20 +365,59 @@ export default {
     goPage(pageName) {
       this.router.push({ name: pageName });
     },
+    gotoCar(){
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
+
+      this.goPage("CarPage")
+
+    },
     gotoDetail(item){
       // console.log(JSON.stringify(item));
       this.router.push({ name: "GoodDetail" , params: {good:JSON.stringify(item) }});
     },
     getList(){
+
+
       // console.log(`api/index/queryGoods?pageNo=1&goodsName=${this.keyword}`);
-      let url =
-        `api/index/queryGoods?pageNo=0&goodsName=${this.keyword}`;
+      // let url1 =
+      //   `api/index/queryGoodsByName?pageNo=0&goodsName=${this.keyword}`;
+      // axios.get(url1).then((data) => {
+      //   console.log(data);
+      //   if (data.data.code == 200) {
+      //     this.list = data.data.result;
+      //   }
+      //   // console.log(this.list);
+      // });
+
+      let url=""
+      if(this.keyword.trim()!=""&&this.categoryName.trim()==""){
+        url = `api/index/queryGoodsByName?pageNo=0&goodsName=${this.keyword}`;
+      }
+      else if(this.keyword.trim()==""&&this.categoryName.trim()!=""){
+        url = `api/index/queryGoodsByCat?pageNo=0&category=${this.categoryName}`;
+      }
+      else if(this.keyword.trim()!=""&&this.categoryName.trim()!=""){
+        url = `api/index/queryGoodsByCatAndName?pageNo=0&category=${this.categoryName}&goodsName=${this.keyword}`;
+      }
+      else{
+        url = `api/index/queryGoodsByName?pageNo=0&goodsName=${this.keyword}`;
+      }
+
+      console.log(url)
       axios.get(url).then((data) => {
         if (data.data.code == 200) {
           this.list = data.data.result;
         }
-        // console.log(this.list);
+        console.log(data);
       });
+
+
     },
     handlePullDown(index) {
       if (index == 1) {

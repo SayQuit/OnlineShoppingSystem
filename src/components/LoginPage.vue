@@ -116,20 +116,6 @@ export default {
         });
         return;
       }
-
-      // 排除已登录再次登录的情况
-      // this.account = this.account.trim();
-      // for (let i = 0; i < this.store.state.user.length; i++) {
-      //   if (this.store.state.user[i].account == this.account) {
-      //     this.$message({
-      //       type: "error",
-      //       message: "用户已登录",
-      //     });
-      //     return;
-      //   }
-      // }
-
-      // 发出请求
       let url = "/api/login?username=" + this.name + "&password=" + this.psw;
       axios.post(url).then((data) => {
         console.log(data);

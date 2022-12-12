@@ -19,29 +19,17 @@
             <tr>
               <td><h1>昵称:</h1></td>
               <td><input type="text" v-model="name" /></td>
-              <!-- <td><p class="input_success">昵称</p></td> -->
             </tr>
 
             <tr>
               <td><h1>登陆密码:</h1></td>
               <td><input type="password" v-model="psw" /></td>
-              <!-- <td><p class="input_error">登陆密码格式不正确，请重新输入</p></td> -->
             </tr>
 
-            <!-- <tr>
-              <td></td>
-              <td class="safe">
-                <p>安全程度</p>
-                <p class="red safeBlock">弱</p>
-                <p class="green safeBlock">中</p>
-                <p class="yellow safeBlock">强</p>
-              </td>
-            </tr> -->
 
             <tr>
               <td><h1>确认密码:</h1></td>
               <td><input type="password" v-model="makesurePsw" /></td>
-              <!-- <td><p class="input_error">确认密码格式不正确，请重新输入</p></td> -->
             </tr>
 
             <tr>
@@ -64,14 +52,7 @@
       </div>
     </div>
 
-    <!-- <div class="footer">
-      <div class="footer-main">
-        <div class="footer-main-item">帮助</div>
-        <div class="footer-main-item">隐私</div>
-        <div class="footer-main-item">条款</div>
-      </div>
-      <div class="footer-copyright">copyright@2017蚂蚁金服体验技术部出品</div>
-    </div> -->
+
   </div>
 </template>
 
@@ -79,7 +60,6 @@
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { useStore } from "vuex";
-// axios.defaults.baseURL="/api"
 export default {
   setup() {
     const router = useRouter();

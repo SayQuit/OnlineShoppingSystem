@@ -9,9 +9,22 @@
         <input type="text" class="header-search-input" placeholder="请输入"  v-model="keyword"/>
         <div class="header-search-click" @click="gotoSearch('GoodList')">搜索</div>
       </div>
-      <div class="header-car" @click="goPage('CarPage')">购物车结算</div>
-      <div class="header-login" @click="goPage('LoginPage')">登录</div>
-      <div class="header-register" @click="goPage('RegisterPage')">注册</div>
+      <div class="header-car" @click="gotoCar()">购物车结算</div>
+      <div
+        class="header-login"
+        @click="goPage('LoginPage')"
+        v-if="user == null"
+      >
+        登录
+      </div>
+      <div class="header-login" v-else>{{ user.username }}的订单</div>
+      <div
+        class="header-register"
+        @click="goPage('RegisterPage')"
+        v-if="user == null"
+      >
+        注册
+      </div>
     </div>
     <div style="width: 100%">
       <img src="../assets/background.jpg" style="width: 100%" />
@@ -89,10 +102,12 @@ export default {
   data() {
     return {
       list: [],
+      user:null
     };
   },
   beforeMount() {
     this.store = useStore();
+    this.user = this.store.state.userInfo;
     this.getList();
   },
   mounted() {},
@@ -117,7 +132,19 @@ export default {
     },
     gotoSearch(){
       this.router.push({ name: "GoodList", params: {keyword: this.keyword } });
-    }
+    },
+    gotoCar(){
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
+
+      this.goPage("CarPage")
+
+    },
   },
 };
 </script>

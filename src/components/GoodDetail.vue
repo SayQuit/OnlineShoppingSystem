@@ -6,12 +6,33 @@
         <div class="header-scut-url">WWW.SCUT.SHOPPING.COM</div>
       </div>
       <div class="header-search">
-        <input type="text" class="header-search-input" placeholder="请输入"  v-model="keyword"/>
-        <div class="header-search-click" @click="gotoSearch('GoodList')">搜索</div>
+        <input
+          type="text"
+          class="header-search-input"
+          placeholder="请输入"
+          v-model="keyword"
+        />
+        <div class="header-search-click" @click="gotoSearch('GoodList')">
+          搜索
+        </div>
       </div>
-      <div class="header-car" @click="goPage('CarPage')">购物车结算</div>
-      <div class="header-login" @click="goPage('LoginPage')">登录</div>
-      <div class="header-register" @click="goPage('RegisterPage')">注册</div>
+      
+      <div class="header-car" @click="gotoCar()">购物车结算</div>
+      <div
+        class="header-login"
+        @click="goPage('LoginPage')"
+        v-if="user == null"
+      >
+        登录
+      </div>
+      <div class="header-login" v-else>{{ user.username }}的订单</div>
+      <div
+        class="header-register"
+        @click="goPage('RegisterPage')"
+        v-if="user == null"
+      >
+        注册
+      </div>
     </div>
 
     <div class="main bgrcolor">
@@ -50,9 +71,9 @@
           <div class="main-detail-cont-sell">销量:193</div>
           <div class="main-detail-cont-price">￥{{ detail.price }}</div>
           <div class="main-detail-cont-num">
-            <div @click="handleChangeNum(-1)">-</div>
-            <div style="background: #ddd">{{ number }}</div>
-            <div @click="handleChangeNum(1)">+</div>
+            <div @click="handleChangeNum(-1)" style="border:none">-</div>
+            <div style="background: #ddd;border:none">{{ number }}</div>
+            <div @click="handleChangeNum(1)" style="border:none">+</div>
           </div>
           <div class="main-detail-cont-opration">
             <div class="main-detail-cont-opration-add" @click="handlePostCar">
@@ -106,7 +127,6 @@
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import axios from "axios";
-import qs from "qs";
 export default {
   setup() {
     const router = useRouter();
@@ -118,12 +138,14 @@ export default {
     return {
       detail: {},
       number: 1,
+      user: null,
     };
   },
   mounted() {
     console.log(this.$route.params);
     this.detail = JSON.parse(this.$route.params.good);
     this.store = useStore();
+    this.user = this.store.state.userInfo;
 
     // console.log(this.detail);
   },
@@ -137,6 +159,13 @@ export default {
       this.router.push({ name: pageName });
     },
     handlePostCar() {
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
       // console.log(this.detail);
       let good = {
         Amount: this.detail.price * this.number,
@@ -144,14 +173,8 @@ export default {
         goodsName: this.detail.name,
         goodsId: this.detail.id,
       };
-      let id = this.store.state.userInfo.id;
-      let data = {
-        goods: JSON.stringify(good),
-        userId: id,
-      };
+
       let url = `api/shoppingcart/addGoodsItem`;
-      console.log(url);
-      console.log(qs.stringify(data));
 
       axios({
         url: url,
@@ -164,31 +187,22 @@ export default {
         .catch(function (err) {
           console.log(err);
         });
-
-      // axios({
-      //   url,
-      //   data: {
-      //     goods:qs.stringify(good),
-      //     userId:id
-      //   },
-      //   method: "post",
-
-      // }).then((res) => {
-      //   console.log(res);
-      // });
-
-      // axios
-      //   .post(url)
-      //   .then((data) => {
-      //     {
-      //       console.log(data);
-      //     }
-      //     // console.log(this.list);
-      //   });
     },
-    gotoSearch(){
-      this.router.push({ name: "GoodList", params: {keyword: this.keyword } });
-    }
+    gotoCar(){
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
+
+      this.goPage("CarPage")
+
+    },
+    gotoSearch() {
+      this.router.push({ name: "GoodList", params: { keyword: this.keyword } });
+    },
   },
 };
 </script>
@@ -318,6 +332,7 @@ export default {
   display: flex;
   padding: 3% 0;
 
+  border: 1px solid;
   margin-bottom: 100px;
 }
 .main-shop-name {
@@ -377,6 +392,7 @@ export default {
   border-radius: 80px;
   display: flex;
   margin-bottom: 100px;
+  border: 1px solid;
 }
 .main-detail-img {
   flex: 1;

@@ -16,9 +16,22 @@
           搜索
         </div>
       </div>
-      <div class="header-car" @click="goPage('CarPage')">购物车结算</div>
-      <div class="header-login" @click="goPage('LoginPage')">登录</div>
-      <div class="header-register" @click="goPage('RegisterPage')">注册</div>
+      <div class="header-car" @click="gotoCar()">购物车结算</div>
+      <div
+        class="header-login"
+        @click="goPage('LoginPage')"
+        v-if="user == null"
+      >
+        登录
+      </div>
+      <div class="header-login" v-else>{{ user.username }}的订单</div>
+      <div
+        class="header-register"
+        @click="goPage('RegisterPage')"
+        v-if="user == null"
+      >
+        注册
+      </div>
     </div>
 
     <div class="nav">
@@ -33,56 +46,26 @@
     </div>
 
     <div class="swiper">
-      <img src="../assets/swiper1.jpg" />
+      <div class="block">
+      <el-carousel autoplay>
+        <el-carousel-item v-for="item in swiper" :key="item">
+          <img :src="item.img" style="width:100%;height:100%">
+        </el-carousel-item>
+      </el-carousel>
     </div>
+
+    </div>
+
+
 
     <div class="main">
       <div class="main-nav">
         <div class="main-nav-title">分类</div>
-        <div class="main-nav-item">
-          <div class="main-nav-item-image">
-            <img src="../assets/womanshirt.png" />
+        <template v-for="item in category" :key="item">
+          <div class="main-nav-item-item" @click="gotoCategory(item.name)">
+            {{ item.name }}
           </div>
-          <div class="main-nav-item-item">男鞋</div>
-          <div class="main-nav-item-item">男鞋</div>
-          <div class="main-nav-item-item">男鞋</div>
-        </div>
-
-        <div class="main-nav-item">
-          <div class="main-nav-item-image">
-            <img src="../assets/womanshirt.png" />
-          </div>
-          <div class="main-nav-item-item">男鞋</div>
-          <div class="main-nav-item-item">男鞋</div>
-          <div class="main-nav-item-item">男鞋</div>
-        </div>
-
-        <div class="main-nav-item">
-          <div class="main-nav-item-image">
-            <img src="../assets/womanshirt.png" />
-          </div>
-          <div class="main-nav-item-item">男鞋</div>
-          <div class="main-nav-item-item">男鞋</div>
-          <div class="main-nav-item-item">男鞋</div>
-        </div>
-
-        <div class="main-nav-item">
-          <div class="main-nav-item-image">
-            <img src="../assets/womanshirt.png" />
-          </div>
-          <div class="main-nav-item-item">男鞋</div>
-          <div class="main-nav-item-item">男鞋</div>
-          <div class="main-nav-item-item">男鞋</div>
-        </div>
-
-        <div class="main-nav-item">
-          <div class="main-nav-item-image">
-            <img src="../assets/womanshirt.png" />
-          </div>
-          <div class="main-nav-item-item">男鞋</div>
-          <div class="main-nav-item-item">男鞋</div>
-          <div class="main-nav-item-item">男鞋</div>
-        </div>
+        </template>
       </div>
       <div class="main-user">
         <div class="main-user-profile">
@@ -209,6 +192,7 @@
   <script>
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import axios from "axios";
 export default {
   setup() {
     const router = useRouter();
@@ -221,20 +205,64 @@ export default {
   data() {
     return {
       user: null,
+      category: null,
+      swiper:[
+        {
+          img:require('../assets/swiper1.jpg')
+        },
+        {
+          img:require('../assets/swiper2.jpg')
+        },
+        {
+          img:require('../assets/swiper3.jpg')
+        }
+      ]
     };
   },
+
+  beforeMount() {
+    this.getIndex();
+  },
+
   mounted() {
     this.store = useStore();
-    console.log(this.store.state);
+    // console.log(this.store.state);
     this.user = this.store.state.userInfo;
-    console.log(this.store.state);
+    // console.log(this.store.state);
   },
   methods: {
     goPage(pageName) {
       this.router.push({ name: pageName });
     },
     gotoSearch() {
-      this.router.push({ name: "GoodList", params: { keyword: this.keyword } });
+      this.router.push({
+        name: "GoodList",
+        params: { keyword: this.keyword, category: "" },
+      });
+    },
+    gotoCar() {
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
+
+      this.goPage("CarPage");
+    },
+    getIndex() {
+      let url = "api/index/indexView";
+      axios.get(url).then((data) => {
+        console.log(data);
+        this.category = data.data.result.categories;
+      });
+    },
+    gotoCategory(name) {
+      this.router.push({
+        name: "GoodList",
+        params: { keyword: "", category: name },
+      });
     },
   },
 };
@@ -366,11 +394,12 @@ export default {
   width: 30%;
   display: inline-block;
   vertical-align: top;
-  height: 450px;
+  padding-bottom: 10px;
   margin-right: 5%;
 
   border-radius: 10px;
-
+  padding: 0 30px 10px;
+  box-sizing: border-box;
   border: 1px solid #999;
 }
 .main-nav-title {
@@ -379,7 +408,6 @@ export default {
   border-bottom: 1px solid #999;
 
   line-height: 80px;
-  padding-left: 10%;
 
   box-sizing: border-box;
 
@@ -399,7 +427,9 @@ export default {
 }
 .main-nav-item-item {
   display: inline-block;
-  margin: 0 20px;
+
+  width: 33%;
+  text-align: center;
 
   line-height: 64px;
   vertical-align: top;
@@ -623,4 +653,20 @@ export default {
   width: 100%;
   text-align: center;
 }
+
+.el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+     background-color: #99a9bf;
+  }
+  
+  .el-carousel__item:nth-child(2n+1) {
+     background-color: #d3dce6;
+  }
 </style>
