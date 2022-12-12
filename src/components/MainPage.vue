@@ -47,16 +47,15 @@
 
     <div class="swiper">
       <div class="block">
-      <el-carousel autoplay>
-        <el-carousel-item v-for="item in swiper" :key="item">
-          <img :src="item.img" style="width:100%;height:100%">
-        </el-carousel-item>
-      </el-carousel>
+        <el-carousel autoplay arrow="always" interval="1500">
+          <el-carousel-item v-for="item in swiper" :key="item">
+            <div style="cursor: pointer" @click="gotoDetail(item.detail)">
+              <img :src="item.img" style="width: 100%; height: 100%" />
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
     </div>
-
-    </div>
-
-
 
     <div class="main">
       <div class="main-nav">
@@ -106,33 +105,33 @@
             </div>
           </div>
         </div>
+
         <div class="main-user-nav">
-          <div class="main-user-nav-item">
+          <div class="main-user-nav-item" @click="gotoSearchNone()">
             <div class="main-user-nav-item-image">
-              <img src="../assets/eat.png" class="mid" />
+              <img src="../assets/search.svg" class="mid" />
+            </div>
+            <div class="main-user-nav-item-desc">搜索</div>
+          </div>
+          <div class="main-user-nav-item" @click="goPage('FourCountry')">
+            <div class="main-user-nav-item-image">
+              <img src="../assets/cate.svg" class="mid" />
+            </div>
+            <div class="main-user-nav-item-desc">四国</div>
+          </div>
+
+          <div class="main-user-nav-item">
+            <div class="main-user-nav-item-image" @click="gotoCar()">
+              <img src="../assets/car.svg" class="mid" />
             </div>
             <div class="main-user-nav-item-desc">购物车</div>
           </div>
 
           <div class="main-user-nav-item">
-            <div class="main-user-nav-item-image">
-              <img src="../assets/eat.png" class="mid" />
+            <div class="main-user-nav-item-image" @click="gotoOrder()">
+              <img src="../assets/order.svg" class="mid" />
             </div>
-            <div class="main-user-nav-item-desc">购物车</div>
-          </div>
-
-          <div class="main-user-nav-item">
-            <div class="main-user-nav-item-image">
-              <img src="../assets/eat.png" class="mid" />
-            </div>
-            <div class="main-user-nav-item-desc">购物车</div>
-          </div>
-
-          <div class="main-user-nav-item">
-            <div class="main-user-nav-item-image">
-              <img src="../assets/eat.png" class="mid" />
-            </div>
-            <div class="main-user-nav-item-desc">购物车</div>
+            <div class="main-user-nav-item-desc">订单</div>
           </div>
         </div>
       </div>
@@ -206,17 +205,20 @@ export default {
     return {
       user: null,
       category: null,
-      swiper:[
+      swiper: [
         {
-          img:require('../assets/swiper1.jpg')
+          img: require("../assets/swiper1.jpg"),
+          detail: "",
         },
         {
-          img:require('../assets/swiper2.jpg')
+          img: require("../assets/swiper2.jpg"),
+          detail: "",
         },
         {
-          img:require('../assets/swiper3.jpg')
-        }
-      ]
+          img: require("../assets/swiper3.jpg"),
+          detail: "",
+        },
+      ],
     };
   },
 
@@ -240,6 +242,12 @@ export default {
         params: { keyword: this.keyword, category: "" },
       });
     },
+    gotoSearchNone() {
+      this.router.push({
+        name: "GoodList",
+        params: { keyword: this.keyword, category: "" },
+      });
+    },
     gotoCar() {
       if (this.user == null) {
         this.$message({
@@ -251,11 +259,34 @@ export default {
 
       this.goPage("CarPage");
     },
+    gotoOrder() {
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
+
+      this.goPage("OrderPage");
+    },
+    gotoDetail(item) {
+      // console.log(JSON.stringify(item));
+      this.router.push({
+        name: "GoodDetail",
+        params: { good: JSON.stringify(item) },
+      });
+    },
     getIndex() {
       let url = "api/index/indexView";
       axios.get(url).then((data) => {
-        console.log(data);
-        this.category = data.data.result.categories;
+        if (data.data.code == 200) {
+          this.category = data.data.result.categories;
+          let res = data.data.result.goodlists;
+          for (let i = 0; i < 3; i++) {
+            this.swiper[i].detail = res[i + 1];
+          }
+        }
       });
     },
     gotoCategory(name) {
@@ -436,6 +467,9 @@ export default {
 
   font-size: 18px;
 
+  cursor: pointer;
+}
+.main-nav-item-item img {
   cursor: pointer;
 }
 .main-nav-item-item:hover {
@@ -655,18 +689,18 @@ export default {
 }
 
 .el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 150px;
-    margin: 0;
-  }
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 150px;
+  margin: 0;
+}
 
-  .el-carousel__item:nth-child(2n) {
-     background-color: #99a9bf;
-  }
-  
-  .el-carousel__item:nth-child(2n+1) {
-     background-color: #d3dce6;
-  }
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
+}
 </style>
