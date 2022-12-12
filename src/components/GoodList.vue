@@ -349,15 +349,16 @@ export default {
     this.$refs.condition2.style.overflow = "hidden"
     this.$refs.condition3.style.overflow = "hidden"
 
-    this.keyword = this.$route.params.keyword;
 
-    // console.log('keyword',this.keyword);
-    // console.log(this.store );
+
 
   },
   beforeMount() {
     this.store = useStore();
     this.user = this.store.state.userInfo;
+    this.keyword = this.$route.params.keyword;
+    this.categoryName = this.$route.params.category;
+
     this.getList()
   },
   
@@ -395,21 +396,23 @@ export default {
       //   // console.log(this.list);
       // });
 
+      console.log(this.keyword);
       let url=""
-      if(this.keyword.trim()!=""&&this.categoryName.trim()==""){
+      if(this.keyword!=""&&this.categoryName==""){
         url = `api/index/queryGoodsByName?pageNo=0&goodsName=${this.keyword}`;
       }
-      else if(this.keyword.trim()==""&&this.categoryName.trim()!=""){
-        url = `api/index/queryGoodsByCat?pageNo=0&category=${this.categoryName}`;
+      else if(this.keyword==""&&this.categoryName!=""){
+        url = `api/index/queryGoodsByCat?pageNo=0&name=${this.categoryName}`;
       }
-      else if(this.keyword.trim()!=""&&this.categoryName.trim()!=""){
-        url = `api/index/queryGoodsByCatAndName?pageNo=0&category=${this.categoryName}&goodsName=${this.keyword}`;
+      else if(this.keyword!=""&&this.categoryName!=""){
+        url = `api/index/queryGoodsByCatAndName?pageNo=0&name=${this.categoryName}&goodsName=${this.keyword}`;
       }
       else{
         url = `api/index/queryGoodsByName?pageNo=0&goodsName=${this.keyword}`;
       }
 
       console.log(url)
+      console.log(this.keyword);
       axios.get(url).then((data) => {
         if (data.data.code == 200) {
           this.list = data.data.result;

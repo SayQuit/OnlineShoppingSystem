@@ -245,7 +245,7 @@ export default {
     gotoSearchNone() {
       this.router.push({
         name: "GoodList",
-        params: { keyword: this.keyword, category: "" },
+        params: { keyword: "", category: "" },
       });
     },
     gotoCar() {

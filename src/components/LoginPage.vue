@@ -118,7 +118,7 @@ export default {
       }
       let url = "/api/login?username=" + this.name + "&password=" + this.psw;
       axios.post(url).then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data.data.code == 1000) {
           this.store.commit("handleChangeUser", data.data.result);
           this.store.commit("handleChangeToken", data.data.msg);

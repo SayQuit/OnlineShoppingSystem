@@ -51,17 +51,33 @@
         <div class="list-item-info-opration">删除订单</div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-export default {};
+import { useStore } from "vuex";
+// import axios from "axios";
+export default {
+  data() {
+    return {
+      list: [],
+      user: {},
+      store: {},
+    };
+  },
+  beforeMount() {
+    this.store = useStore();
+    this.user = this.store.state.userInfo;
+  },
+  methods: {
+    
+  },
+};
 </script>
 
 <style>
 .list {
-  width: 90%;
+  width: 1440px;
   margin: 0 auto;
   border-top: 1px solid black;
   /* height: 500px; */
@@ -143,17 +159,17 @@ export default {};
   border: 1px solid;
   padding: 0;
 }
-.list-item-info{
-    left: 90%;
+.list-item-info {
+  left: 90%;
 }
-.list-item-info .list-item-info-price{
-    font-size: 26px;
-    color: #CE0000;
-    display: block;
-    margin-bottom: 20px;
+.list-item-info .list-item-info-price {
+  font-size: 26px;
+  color: #ce0000;
+  display: block;
+  margin-bottom: 20px;
 }
-.list-item-info-opration{
-    width: 100%;
-    text-align: center;
+.list-item-info-opration {
+  width: 100%;
+  text-align: center;
 }
 </style>

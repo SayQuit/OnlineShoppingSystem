@@ -56,12 +56,40 @@
   </template>
   
   <script>
-  export default {};
+  import { useStore } from "vuex";
+import axios from "axios";
+  export default {
+    data() {
+      return {
+        list:[],
+        user:{},
+        store:{}
+      }
+    },
+    beforeMount(){
+      this.store = useStore();
+      this.user = this.store.state.userInfo;
+      this.getList()
+    },
+    methods: {
+      getList(){
+      let url=`api/shoppingcart/queryByUserId?userId=${this.user.id}`
+      console.log(url);
+      axios.get(url).then((data) => {
+        console.log(data);
+        
+        
+      });
+    }
+    },
+
+  };
   </script>
   
   <style>
   .list {
-    width: 90%;
+    
+  width: 1440px;
     margin: 0 auto;
     border-top: 1px solid black;
     /* height: 500px; */
