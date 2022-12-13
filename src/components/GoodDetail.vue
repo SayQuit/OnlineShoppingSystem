@@ -16,7 +16,7 @@
           搜索
         </div>
       </div>
-      
+
       <div class="header-car" @click="gotoCar()">购物车结算</div>
       <div
         class="header-login"
@@ -68,23 +68,25 @@
           <div class="main-detail-cont-title">
             {{ detail.name }}
           </div>
-          <div class="main-detail-cont-sell">销量:193</div>
+          <!-- <div class="main-detail-cont-sell">销量:193</div> -->
           <div class="main-detail-cont-price">￥{{ detail.price }}</div>
           <div class="main-detail-cont-num">
-            <div @click="handleChangeNum(-1)" style="border:none">-</div>
-            <div style="background: #ddd;border:none">{{ number }}</div>
-            <div @click="handleChangeNum(1)" style="border:none">+</div>
+            <div @click="handleChangeNum(-1)" style="border: none">-</div>
+            <div style="background: #ddd; border: none">{{ number }}</div>
+            <div @click="handleChangeNum(1)" style="border: none">+</div>
           </div>
           <div class="main-detail-cont-opration">
             <div class="main-detail-cont-opration-add" @click="handlePostCar">
               加入购物车
             </div>
-            <div class="main-detail-cont-opration-buy">购买</div>
+            <div class="main-detail-cont-opration-buy" @click="handleBuy">
+              购买
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="comment bgrwhite">
+      <!-- <div class="comment bgrwhite">
         <h1 class="registerTitle">评论</h1>
         <div class="comment-item">
           <div>用户13148739454</div>
@@ -118,7 +120,7 @@
           </div>
           <div>2017-10-18</div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -151,8 +153,8 @@ export default {
   },
   methods: {
     handleChangeNum(num) {
-      if (num + this.number >= 1 || num + this.number <= this.detail.number) {
-        num + this.number;
+      if (num + this.number >= 1 && num + this.number <= this.detail.number) {
+        this.number = num + this.number;
       }
     },
     goPage(pageName) {
@@ -181,14 +183,29 @@ export default {
         data: good,
         method: "post",
       }) //传参
-        .then(function (res) {
-          console.log(res);
+        .then((res) => {
+          // console.log(res);
+          if (res.data.code == 200) {
+            this.$message({
+              type: "success",
+              message: "添加成功",
+            });
+          } else {
+            this.$message({
+              type: "error",
+              message: "添加失败",
+            });
+          }
         })
-        .catch(function (err) {
+        .catch((err) => {
           console.log(err);
+          this.$message({
+            type: "error",
+            message: "添加失败",
+          });
         });
     },
-    gotoCar(){
+    gotoCar() {
       if (this.user == null) {
         this.$message({
           type: "error",
@@ -197,16 +214,67 @@ export default {
         return;
       }
 
-      this.goPage("CarPage")
-
+      this.goPage("CarPage");
     },
     gotoSearch() {
       this.router.push({ name: "GoodList", params: { keyword: this.keyword } });
     },
+    handleBuy() {
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
+      let good = [
+        {
+          Amount: this.detail.price * this.number,
+          itemCount: JSON.stringify(this.number),
+          goodsName: this.detail.name,
+          goodsId: this.detail.id,
+        },
+      ];
+
+      let data = {
+        buyerId: this.user.id,
+        sellerId: 1,
+        totalAmount: this.detail.price * this.number,
+        realAmount: this.detail.price * this.number,
+        itemList: good,
+      };
+      // let testStr = encodeURIComponent(JSON.stringify(footerData));
+
+      let url = `api/orderBase/createOrderBase`;
+
+      axios({
+        url: url,
+        data: data,
+        method: "post",
+      }) //传参
+        .then((res) => {
+          console.log(res);
+          if (res.data.code == 200) {
+            console.log("success");
+          } else {
+            this.$message({
+              type: "error",
+              message: "添加失败",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message({
+            type: "error",
+            message: "添加失败",
+          });
+        });
+    },
   },
 };
 </script>
-<style>
+<style scoped>
 .comment {
   width: 1300px;
   margin: 0 auto;
@@ -415,7 +483,7 @@ export default {
   color: #ce0000;
 }
 .main-detail-cont-opration {
-  margin-top: 35%;
+  margin-top: 15%;
   font-size: 24px;
   width: fit-content;
 }

@@ -6,8 +6,15 @@
         <div class="header-scut-url">WWW.SCUT.SHOPPING.COM</div>
       </div>
       <div class="header-search">
-        <input type="text" class="header-search-input" placeholder="请输入"  v-model="keyword"/>
-        <div class="header-search-click" @click="gotoSearch('GoodList')">搜索</div>
+        <input
+          type="text"
+          class="header-search-input"
+          placeholder="请输入"
+          v-model="keyword"
+        />
+        <div class="header-search-click" @click="gotoSearch('GoodList')">
+          搜索
+        </div>
       </div>
       <div class="header-car" @click="gotoCar()">购物车结算</div>
       <div
@@ -51,30 +58,30 @@
           <div class="goods-item-image">
             <img :src="item.logo" class="mid" />
           </div>
-          <div class="goods-item-desc">{{item.name}}</div>
-          <div class="goods-item-price">￥{{item.price}}</div>
+          <div class="goods-item-desc">{{ item.name }}</div>
+          <div class="goods-item-price">￥{{ item.price }}</div>
         </div>
       </template>
     </div>
 
-
-
     <div class="page">
-      <span class="page-num">&lt;</span>
-      <span class="page-num page-choosenum">1</span>
-      <span class="page-num">2</span>
-      <span class="page-num">3</span>
-      <span class="page-num">4</span>
-      <span class="page-num">5</span>
-      <span class="page-num">6</span>
-      <span class="page-num">7</span>
-      <span class="page-num">8</span>
-      <span class="page-num">></span>
-      <span>
+      <span class="page-num" @click="subPage()">&lt;</span>
+      <template v-for="item in maxPage" :key="item">
+        <span
+          class="page-num"
+          v-if="item != Number(pageNo + 1)"
+          @click="changePage(item)"
+          >{{ item }}</span
+        >
+        <span class="page-num page-choosenum" v-else>{{ item }}</span>
+      </template>
+      <span class="page-num" @click="addPage()">></span>
+
+      <!-- <span>
         <span>跳至</span>
         <input type="number" class="page-input" />
         <span>页</span>
-      </span>
+      </span> -->
     </div>
 
     <div class="footer">
@@ -102,7 +109,9 @@ export default {
   data() {
     return {
       list: [],
-      user:null
+      user: null,
+      pageNo: 0,
+      maxPage: 9,
     };
   },
   beforeMount() {
@@ -115,9 +124,12 @@ export default {
     goPage(pageName) {
       this.router.push({ name: pageName });
     },
-    gotoDetail(item){
+    gotoDetail(item) {
       // console.log(JSON.stringify(item));
-      this.router.push({ name: "GoodDetail" , params: {good:JSON.stringify(item) }});
+      this.router.push({
+        name: "GoodDetail",
+        params: { good: JSON.stringify(item) },
+      });
     },
     getList() {
       let url = "api/index/queryGoods?pageNo=0";
@@ -130,10 +142,10 @@ export default {
         // console.log(url);
       });
     },
-    gotoSearch(){
-      this.router.push({ name: "GoodList", params: {keyword: this.keyword } });
+    gotoSearch() {
+      this.router.push({ name: "GoodList", params: { keyword: this.keyword } });
     },
-    gotoCar(){
+    gotoCar() {
       if (this.user == null) {
         this.$message({
           type: "error",
@@ -142,14 +154,30 @@ export default {
         return;
       }
 
-      this.goPage("CarPage")
+      this.goPage("CarPage");
+    },
 
+
+    changePage(item){
+      this.pageNo=item-1
+      this.changeNo()
+      this.getList()
+    },
+    subPage(){
+      this.pageNo=this.pageNo-1
+      this.changeNo()
+      this.getList()
+    },
+    addPage(){
+      this.pageNo=this.pageNo+1
+      this.changeNo()
+      this.getList()
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .mid {
   position: absolute;
   top: 50%;
@@ -169,7 +197,7 @@ export default {
 .header-scut {
   margin-left: 150px;
   width: 200px;
-  display: inline-block;  
+  display: inline-block;
   cursor: pointer;
 }
 .header-scut-name {
@@ -180,7 +208,7 @@ export default {
   width: 100%;
   text-align: center;
   margin-top: 10px;
-  
+
   cursor: pointer;
 }
 
@@ -277,7 +305,7 @@ export default {
   cursor: pointer;
   border: none;
 
-  border: 1px solid #DDD;
+  border: 1px solid #ddd;
   box-shadow: 4px 4px 20px -8px rgba(0, 0, 0, 0.25);
   vertical-align: top;
 }

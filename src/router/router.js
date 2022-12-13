@@ -11,6 +11,11 @@ const CarPage=()=>import('@/components/CarPage.vue')
 const OrderPage=()=>import('@/components/OrderPage.vue')
 const SettleAccount=()=>import('@/components/SettleAccount.vue')
 
+const AddGood=()=>import('@/components/AddGood.vue')
+const AddCategory=()=>import('@/components/AddCategory.vue')
+
+const AdminLogin=()=>import('@/components/AdminLogin.vue')
+
 
 
 
@@ -60,6 +65,23 @@ const routes = [
         path: '/OrderPage',
         name: 'OrderPage',
         component: OrderPage,
+    },
+
+    {
+        path: '/AddGood',
+        name: 'AddGood',
+        component: AddGood,
+    },
+
+    {
+        path: '/AddCategory',
+        name: 'AddCategory',
+        component: AddCategory,
+    },
+    {
+        path: '/AdminLogin',
+        name: 'AdminLogin',
+        component: AdminLogin,
     },
 
     

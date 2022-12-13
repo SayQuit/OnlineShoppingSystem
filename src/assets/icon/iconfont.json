@@ -1,0 +1,30 @@
+{
+  "id": "3822967",
+  "name": "在线购物系统",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "10314452",
+      "name": "编辑",
+      "font_class": "beautyEdit",
+      "unicode": "e706",
+      "unicode_decimal": 59142
+    },
+    {
+      "icon_id": "15933094",
+      "name": "微信",
+      "font_class": "wechat",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "15933089",
+      "name": "支付宝",
+      "font_class": "alipay",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    }
+  ]
+}

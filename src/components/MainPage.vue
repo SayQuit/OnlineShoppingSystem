@@ -24,7 +24,7 @@
       >
         登录
       </div>
-      <div class="header-login" v-else>{{ user.username }}的订单</div>
+      <div class="header-login" @click="gotoOrder()" v-else>{{ user.username }}的订单</div>
       <div
         class="header-register"
         @click="goPage('RegisterPage')"
@@ -75,10 +75,10 @@
               />
             </div>
             <div class="main-user-profile-desc" v-if="user == null">
-              你好呀!SCUTer~
+              你好呀! SCUTer~
             </div>
             <div class="main-user-profile-desc" v-else>
-              你好呀!{{ user.username }}
+              你好呀! <span style="color:#349efa">{{ user.username }}</span>
             </div>
           </div>
           <div></div>
@@ -91,6 +91,16 @@
             >
               <div style="width: fit-content; height: fit-content" class="mid">
                 登录
+              </div>
+            </div>
+          </div>
+          <div class="main-user-operation-admin">
+            <div
+              class="main-user-operation-admin-button mid"
+              @click="goPage('AdminLogin')"
+            >
+              <div style="width: fit-content; height: fit-content" class="mid">
+                管理员登录
               </div>
             </div>
           </div>
@@ -107,18 +117,6 @@
         </div>
 
         <div class="main-user-nav">
-          <div class="main-user-nav-item" @click="gotoSearchNone()">
-            <div class="main-user-nav-item-image">
-              <img src="../assets/search.svg" class="mid" />
-            </div>
-            <div class="main-user-nav-item-desc">搜索</div>
-          </div>
-          <div class="main-user-nav-item" @click="goPage('FourCountry')">
-            <div class="main-user-nav-item-image">
-              <img src="../assets/cate.svg" class="mid" />
-            </div>
-            <div class="main-user-nav-item-desc">四国</div>
-          </div>
 
           <div class="main-user-nav-item">
             <div class="main-user-nav-item-image" @click="gotoCar()">
@@ -133,6 +131,22 @@
             </div>
             <div class="main-user-nav-item-desc">订单</div>
           </div>
+
+
+          <div class="main-user-nav-item">
+            <div class="main-user-nav-item-image" @click="gotoAddGood()">
+              <img src="../assets/add_good.svg" class="mid" />
+            </div>
+            <div class="main-user-nav-item-desc">添加商品</div>
+          </div>
+          <div class="main-user-nav-item">
+            <div class="main-user-nav-item-image" @click="gotoAddCategory()">
+              <img src="../assets/cate.svg" class="mid" />
+            </div>
+            <div class="main-user-nav-item-desc">添加分类</div>
+          </div>
+
+
         </div>
       </div>
     </div>
@@ -177,6 +191,8 @@
         </div>
       </div>
     </div>
+
+
     <div class="footer">
       <div class="footer-main">
         <div class="footer-main-item">帮助</div>
@@ -230,6 +246,7 @@ export default {
     this.store = useStore();
     // console.log(this.store.state);
     this.user = this.store.state.userInfo;
+    console.log(this.user);
     // console.log(this.store.state);
   },
   methods: {
@@ -248,6 +265,42 @@ export default {
         params: { keyword: "", category: "" },
       });
     },
+    gotoAddCategory(){
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
+      if(this.user.role=="USER"){
+        this.$message({
+          type: "error",
+          message: "用户不是管理员,无法进入该页面",
+        });
+        return;
+      }
+
+      this.goPage("AddGood");
+    },
+    gotoAddGood(){
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
+      if(this.user.role=="USER"){
+        this.$message({
+          type: "error",
+          message: "用户不是管理员,无法进入该页面",
+        });
+        return;
+      }
+
+      this.goPage("AddGood");
+    },
     gotoCar() {
       if (this.user == null) {
         this.$message({
@@ -256,6 +309,7 @@ export default {
         });
         return;
       }
+      
 
       this.goPage("CarPage");
     },
@@ -538,41 +592,61 @@ export default {
   height: 25%;
   width: 100%;
   /* display: flex; */
-  font-size: 20px;
+  font-size: 16px;
 }
 .main-user-operation-login {
   position: relative;
-  width: 40%;
+  width: 20%;
   height: 100%;
   display: inline-block;
   margin-left: 10%;
 }
 .main-user-operation-login-button {
   background-color: #349efa;
-  border-radius: 10px;
+  border-radius: 20px;
   line-height: 42px;
   text-align: center;
   display: inline-block;
-  width: 40%;
+  width: 80%;
+  height: 40%;
+  color: white;
+  cursor: pointer;
+}
+.main-user-operation-admin {
+  position: relative;
+  width: 20%;
+  height: 100%;
+  display: inline-block;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+.main-user-operation-admin-button {
+  background-color: #349efa;
+  border-radius: 20px;
+  line-height: 42px;
+  text-align: center;
+  display: inline-block;
+  width: 80%;
   height: 40%;
   color: white;
   cursor: pointer;
 }
 .main-user-operation-register {
   position: relative;
-  width: 40%;
+  width: 20%;
   height: 100%;
   display: inline-block;
   margin-right: 10%;
 }
 .main-user-operation-register-button {
-  border-radius: 10px;
+  border-radius: 20px;
   line-height: 42px;
   text-align: center;
   display: inline-block;
-  width: 40%;
+  width: 80%;
   height: 40%;
   cursor: pointer;
+  box-sizing: border-box;
 
   color: #349efa;
   border: 3px solid #349efa;

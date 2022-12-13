@@ -6,13 +6,18 @@
         <div class="header-scut-url">WWW.SCUT.SHOPPING.COM</div>
       </div>
       <div class="header-search">
-        <input type="text" class="header-search-input" placeholder="请输入"  v-model="keyword"/>
-        <div class="header-search-click" @click="gotoSearch('GoodList')">搜索</div>
+        <input
+          type="text"
+          class="header-search-input"
+          placeholder="请输入"
+          v-model="keyword"
+        />
+        <div class="header-search-click"  @click="getList()">
+          搜索
+        </div>
       </div>
-      
+
       <div class="header-car" @click="gotoCar()">购物车结算</div>
-
-
 
       <div
         class="header-login"
@@ -29,297 +34,48 @@
       >
         注册
       </div>
-
-
-
     </div>
 
-    <div class="bgrcolor" style="height: 1460px">
+    <div class="bgrcolor">
       <div>
         <div class="condition bgrwhite">
           <div class="condition-block">
             <div class="condition-block-title">分类:</div>
-            <div class="condition-block-item" ref="condition1">
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
+            <div class="condition-block-item">
+              <template v-for="item in category" :key="item">
+                <div @click="changeCategoryName(item.name)" :class="{'isCondition':item.name==categoryName}">{{item.name}}</div>
+              </template>
+            </div>
 
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-            </div>
-            <div class="condition-block-pull">
-              <div
-                class="condition-block-pull-button"
-                @click="handlePullDown(1)"
-              >
-                下拉/隐藏
-              </div>
-            </div>
-          </div>
-
-          <div class="condition-block">
-            <div class="condition-block-title">分类:</div>
-            <div class="condition-block-item" ref="condition2">
-              <div class="isCondition">大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-            </div>
-            <div class="condition-block-pull">
-              <div
-                class="condition-block-pull-button"
-                @click="handlePullDown(2)"
-              >
-              下拉/隐藏
-              </div>
-            </div>
-          </div>
-
-          <div class="condition-block">
-            <div class="condition-block-title">分类:</div>
-            <div class="condition-block-item" ref="condition3">
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-              <div>手机相机</div>
-              <div>大家电</div>
-              <div>海外购</div>
-            </div>
-            <div class="condition-block-pull">
-              <div
-                class="condition-block-pull-button"
-                @click="handlePullDown(3)"
-              >
-              下拉/隐藏
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="rank bgrwhite">
-          <p class="rank-title">SCUTer TOP 8</p>
-          <div class="rank-sort">
-            <li>
-              <span class="rank-sort-num">1</span
-              ><span class="rank-sort-link"
-                >优奕酷 沙发
-                北欧布艺客厅沙发小户型三人位乳胶沙发简约现代科技布实木沙发
-                乳胶款（可定制科技布默认棉麻） 三人</span
-              >
-            </li>
-            <li>
-              <span class="rank-sort-num">2</span
-              ><span class="rank-sort-link"
-                >优奕酷 沙发
-                北欧布艺客厅沙发小户型三人位乳胶沙发简约现代科技布实木沙发
-                乳胶款（可定制科技布默认棉麻） 三人</span
-              >
-            </li>
-            <li>
-              <span class="rank-sort-num">3</span
-              ><span class="rank-sort-link"
-                >优奕酷 沙发
-                北欧布艺客厅沙发小户型三人位乳胶沙发简约现代科技布实木沙发
-                乳胶款（可定制科技布默认棉麻） 三人</span
-              >
-            </li>
-            <li>
-              <span class="rank-sort-num">4</span
-              ><span class="rank-sort-link"
-                >优奕酷 沙发
-                北欧布艺客厅沙发小户型三人位乳胶沙发简约现代科技布实木沙发
-                乳胶款（可定制科技布默认棉麻） 三人</span
-              >
-            </li>
-            <li>
-              <span class="rank-sort-num">5</span
-              ><span class="rank-sort-link"
-                >优奕酷 沙发
-                北欧布艺客厅沙发小户型三人位乳胶沙发简约现代科技布实木沙发
-                乳胶款（可定制科技布默认棉麻） 三人</span
-              >
-            </li>
-            <li>
-              <span class="rank-sort-num">6</span
-              ><span class="rank-sort-link"
-                >优奕酷 沙发
-                北欧布艺客厅沙发小户型三人位乳胶沙发简约现代科技布实木沙发
-                乳胶款（可定制科技布默认棉麻） 三人</span
-              >
-            </li>
-
-            <li>
-              <span class="rank-sort-num">7</span
-              ><span class="rank-sort-link"
-                >优奕酷 沙发
-                北欧布艺客厅沙发小户型三人位乳胶沙发简约现代科技布实木沙发
-                乳胶款（可定制科技布默认棉麻） 三人</span
-              >
-            </li>
-            <li>
-              <span class="rank-sort-num">8</span
-              ><span class="rank-sort-link"
-                >优奕酷 沙发
-                北欧布艺客厅沙发小户型三人位乳胶沙发简约现代科技布实木沙发
-                乳胶款（可定制科技布默认棉麻） 三人</span
-              >
-            </li>
           </div>
         </div>
       </div>
 
       <div class="goods bgrwhite">
         <template v-for="item in list" :key="item">
-        <div class="goods-item" @click="gotoDetail(item)">
-          <div class="goods-item-image">
-            <img :src="item.logo" class="mid" />
+          <div class="goods-item" @click="gotoDetail(item)">
+            <div class="goods-item-image">
+              <img :src="item.logo" class="mid" />
+            </div>
+            <div class="goods-item-desc">{{ item.name }}</div>
+            <div class="goods-item-price">￥{{ item.price }}</div>
           </div>
-          <div class="goods-item-desc">{{item.name}}</div>
-          <div class="goods-item-price">￥{{item.price}}</div>
-        </div>
-      </template>
+        </template>
 
-        <!-- <div class="page">
-          <span class="page-num">&lt;</span>
-          <span class="page-num page-choosenum">1</span>
-          <span class="page-num">2</span>
-          <span class="page-num">3</span>
-          <span class="page-num">4</span>
-          <span class="page-num">5</span>
-          <span class="page-num">6</span>
-          <span class="page-num">7</span>
-          <span class="page-num">8</span>
-          <span class="page-num">></span>
-          <span>
+        <div class="page">
+          <span class="page-num" @click="subPage()">&lt;</span>
+          <template v-for="item in maxPage" :key="item">
+            <span class="page-num" v-if="item!=Number(pageNo+1)" @click="changePage(item)">{{item}}</span>
+            <span class="page-num page-choosenum" v-else >{{item}}</span>
+          </template>
+
+          <span class="page-num" @click="addPage()">></span>
+          <!-- <span>
             <span>跳至</span>
             <input type="number" class="page-input" />
             <span>页</span>
-          </span>
-        </div> -->
+          </span> -->
+        </div>
       </div>
     </div>
   </div>
@@ -334,24 +90,85 @@ export default {
     const router = useRouter();
     return {
       router,
+
     };
   },
   data() {
     return {
-      list:[],
-      keyword:"",
-      categoryName:"",
+      list: [],
+      keyword: "",
+      categoryName: "",
       user: null,
+      category:[
+        {
+          name:'大家电',
+        },
+        {
+          name:'数码相机',
+        },
+        {
+          name:'海外购',
+        },
+        {
+          name:'大家电',
+        },
+        {
+          name:'数码相机',
+        },
+        {
+          name:'海外购',
+        },
+        {
+          name:'大家电',
+        },
+        {
+          name:'数码相机',
+        },
+        {
+          name:'海外购',
+        },
+        {
+          name:'大家电',
+        },
+        {
+          name:'数码相机',
+        },
+        {
+          name:'海外购',
+        },
+        {
+          name:'大家电',
+        },
+        {
+          name:'数码相机',
+        },
+        {
+          name:'海外购',
+        },
+        {
+          name:'大家电',
+        },
+        {
+          name:'数码相机',
+        },
+        {
+          name:'海外购',
+        },
+        {
+          name:'大家电',
+        },
+        {
+          name:'数码相机',
+        },
+        {
+          name:'海外购',
+        },
+      ],
+      pageNo:0,
+      maxPage:9,
     };
   },
-  mounted(){
-    this.$refs.condition1.style.overflow = "hidden"
-    this.$refs.condition2.style.overflow = "hidden"
-    this.$refs.condition3.style.overflow = "hidden"
-
-
-
-
+  mounted() {
   },
   beforeMount() {
     this.store = useStore();
@@ -359,14 +176,14 @@ export default {
     this.keyword = this.$route.params.keyword;
     this.categoryName = this.$route.params.category;
 
-    this.getList()
+    this.getList();
   },
-  
+
   methods: {
     goPage(pageName) {
       this.router.push({ name: pageName });
     },
-    gotoCar(){
+    gotoCar() {
       if (this.user == null) {
         this.$message({
           type: "error",
@@ -375,43 +192,41 @@ export default {
         return;
       }
 
-      this.goPage("CarPage")
-
+      this.goPage("CarPage");
     },
-    gotoDetail(item){
+    changePage(item){
+      this.pageNo=item-1
+      this.getList()
+    },
+    subPage(){
+      this.pageNo=this.pageNo-1
+      this.getList()
+    },
+    addPage(){
+      this.pageNo=this.pageNo+1
+      this.getList()
+    },
+    gotoDetail(item) {
       // console.log(JSON.stringify(item));
-      this.router.push({ name: "GoodDetail" , params: {good:JSON.stringify(item) }});
+      this.router.push({
+        name: "GoodDetail",
+        params: { good: JSON.stringify(item) },
+      });
     },
-    getList(){
-
-
-      // console.log(`api/index/queryGoods?pageNo=1&goodsName=${this.keyword}`);
-      // let url1 =
-      //   `api/index/queryGoodsByName?pageNo=0&goodsName=${this.keyword}`;
-      // axios.get(url1).then((data) => {
-      //   console.log(data);
-      //   if (data.data.code == 200) {
-      //     this.list = data.data.result;
-      //   }
-      //   // console.log(this.list);
-      // });
-
+    getList() {
       console.log(this.keyword);
-      let url=""
-      if(this.keyword!=""&&this.categoryName==""){
-        url = `api/index/queryGoodsByName?pageNo=0&goodsName=${this.keyword}`;
-      }
-      else if(this.keyword==""&&this.categoryName!=""){
-        url = `api/index/queryGoodsByCat?pageNo=0&name=${this.categoryName}`;
-      }
-      else if(this.keyword!=""&&this.categoryName!=""){
-        url = `api/index/queryGoodsByCatAndName?pageNo=0&name=${this.categoryName}&goodsName=${this.keyword}`;
-      }
-      else{
-        url = `api/index/queryGoodsByName?pageNo=0&goodsName=${this.keyword}`;
+      let url = "";
+      if (this.keyword != "" && this.categoryName == "") {
+        url = `api/index/queryGoodsByName?pageNo=${this.pageNo}&goodsName=${this.keyword}`;
+      } else if (this.keyword == "" && this.categoryName != "") {
+        url = `api/index/queryGoodsByCat?pageNo=${this.pageNo}&name=${this.categoryName}`;
+      } else if (this.keyword != "" && this.categoryName != "") {
+        url = `api/index/queryGoodsByCatAndName?pageNo=${this.pageNo}&category=${this.categoryName}&goodsName=${this.keyword}`;
+      } else {
+        url = `api/index/queryGoodsByName?pageNo=${this.pageNo}&goodsName=${this.keyword}`;
       }
 
-      console.log(url)
+      console.log(url);
       console.log(this.keyword);
       axios.get(url).then((data) => {
         if (data.data.code == 200) {
@@ -419,61 +234,21 @@ export default {
         }
         console.log(data);
       });
-
-
     },
-    handlePullDown(index) {
-      if (index == 1) {
-        if (this.$refs.condition1.style.overflow == "hidden") {
-          this.$refs.condition1.style.overflow = "visible";
-          this.$refs.condition1.style.zIndex = 100;
-          this.$refs.condition1.style.height = "fit-content";
-          this.$refs.condition1.style.border = "1px solid #888";
-        }
-        else{
-          this.$refs.condition1.style.overflow = "hidden";
-          this.$refs.condition1.style.zIndex = "";
-          this.$refs.condition1.style.height = "100%";
-          this.$refs.condition1.style.border = "none";
-        }
-      }
-      if (index == 2) {
-        if (this.$refs.condition2.style.overflow == "hidden") {
-          this.$refs.condition2.style.overflow = "visible";
-          this.$refs.condition2.style.zIndex = 100;
-          this.$refs.condition2.style.height = "fit-content";
-          this.$refs.condition2.style.border = "1px solid #888";
-        }
-        else{
-          this.$refs.condition2.style.overflow = "hidden";
-          this.$refs.condition2.style.zIndex = "";
-          this.$refs.condition2.style.height = "100%";
-          this.$refs.condition2.style.border = "none";
-        }
-      }
-      if (index == 3) {
-        if (this.$refs.condition3.style.overflow == "hidden") {
-          this.$refs.condition3.style.overflow = "visible";
-          this.$refs.condition3.style.zIndex = 100;
-          this.$refs.condition3.style.height = "fit-content";
-          this.$refs.condition3.style.border = "1px solid #888";
-        }
-        else{
-          this.$refs.condition3.style.overflow = "hidden";
-          this.$refs.condition3.style.zIndex = "";
-          this.$refs.condition3.style.height = "100%";
-          this.$refs.condition3.style.border = "none";
-        }
-      }
+
+    gotoSearch() {
+      this.router.push({ name: "GoodList", params: { keyword: this.keyword } });
     },
-    gotoSearch(){
-      this.router.push({ name: "GoodList", params: {keyword: this.keyword } });
+    changeCategoryName(name){
+      if(this.categoryName==name)this.categoryName=''
+      else this.categoryName=name
+      this.getList()
     }
   },
 };
 </script>
 
-<style>
+<style scoped>
 li {
   list-style-type: none;
 }
@@ -489,7 +264,7 @@ li {
 .header-scut {
   margin-left: 150px;
   width: 200px;
-  display: inline-block;  
+  display: inline-block;
   cursor: pointer;
 }
 .header-scut-name {
@@ -569,23 +344,17 @@ li {
 }
 
 .condition {
-  padding: 5%;
   margin-top: 50px;
-  margin-left: 3%;
-  margin-right: 3%;
-  width: 55%;
-  height: 500px;
+  width: 100%;
   display: inline-block;
   border-radius: 20px;
   vertical-align: top;
-  box-sizing: border-box;
   color: #444;
 }
 .condition-block {
   display: flex;
-  height: 33%;
+  height: fit-content;
   border-bottom: 1px solid #888;
-  padding: 2% 0 0;
   box-sizing: border-box;
 }
 .condition-block-title {
@@ -615,14 +384,18 @@ li {
   text-align: center;
   cursor: pointer;
 }
-.condition-block-item > div {
+.condition-block-item  div {
   text-align: center;
-  height: 33%;
-  width: 14%;
+  height: 32px;
+
+  width: 7%;
+  margin: 0 3%;
+  box-sizing: border-box;
   display: inline-block;
   line-height: 32px;
   border-radius: 10px;
   cursor: pointer;
+    margin-bottom: 50px;
 }
 .isCondition {
   background-color: #349efa;
@@ -693,7 +466,7 @@ li {
   box-sizing: border-box;
   margin: 1%;
   border-radius: 10px;
-  border: 1px solid #DDD;
+  border: 1px solid #ddd;
   box-shadow: 4px 4px 20px -8px rgba(0, 0, 0, 0.25);
   background-color: white;
   cursor: pointer;
