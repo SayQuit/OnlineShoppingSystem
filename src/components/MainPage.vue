@@ -127,7 +127,7 @@
 
           <div class="main-user-nav-item">
             <div class="main-user-nav-item-image" @click="gotoOrder()">
-              <img src="../assets/order.svg" class="mid" />
+              <img src="../assets/orders.svg" class="mid" />
             </div>
             <div class="main-user-nav-item-desc">订单</div>
           </div>

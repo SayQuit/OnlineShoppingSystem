@@ -169,9 +169,9 @@ export default {
         return;
       }
       // console.log(this.detail);
-      let good = {
+      let goods = {
         Amount: this.detail.price * this.number,
-        itemCount: JSON.stringify(this.number),
+        itemCount: this.number,
         goodsName: this.detail.name,
         goodsId: this.detail.id,
       };
@@ -180,8 +180,9 @@ export default {
 
       axios({
         url: url,
-        data: good,
+        data: goods,
         method: "post",
+        contentType: "application/json;charset=utf-8"
       }) //传参
         .then((res) => {
           // console.log(res);
@@ -227,21 +228,22 @@ export default {
         });
         return;
       }
-      let good = [
+      let good =[
         {
           Amount: this.detail.price * this.number,
-          itemCount: JSON.stringify(this.number),
+          itemCount: this.number,
           goodsName: this.detail.name,
-          goodsId: this.detail.id,
+          goodsId: this.detail.id
         },
-      ];
+          ]
+      ;
 
       let data = {
         buyerId: this.user.id,
         sellerId: 1,
         totalAmount: this.detail.price * this.number,
         realAmount: this.detail.price * this.number,
-        itemList: good,
+        itemList: good
       };
       // let testStr = encodeURIComponent(JSON.stringify(footerData));
 
@@ -251,6 +253,7 @@ export default {
         url: url,
         data: data,
         method: "post",
+        contentType: "application/json;charset=utf-8"
       }) //传参
         .then((res) => {
           console.log(res);

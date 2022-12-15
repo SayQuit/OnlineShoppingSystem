@@ -1,7 +1,7 @@
 <template>
   <div class="settleAccount">
     <div class="header">
-      <div class="header-order-settlement">订单结算</div>
+      <div class="header-orders-settlement">订单结算</div>
       <div class="header-fill-check">填写并核对订单信息</div>
     </div>
     <div class="address">
@@ -151,7 +151,7 @@ export default {
   position: absolute;
   left: 40%;
 }
-.list-item-order {
+.list-item-orders {
   font-size: 18px;
 }
 .LRmid {
@@ -229,7 +229,7 @@ a:hover {
   display: inline-block;
   border-bottom: 1px solid #999;
 }
-.header-order-settlement {
+.header-orders-settlement {
   font-size: 30px;
   text-align: left;
   font-weight: bolder;

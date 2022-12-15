@@ -37,7 +37,7 @@
     <!-- <div class="header">
       
       <span style="color:white">我的购物车</span>
-      <div class="header-order-type">
+      <div class="header-orders-type">
         <a href="">全部订单</a>
         <a href="">待付款</a>
         <a href="">待发货</a>
@@ -291,7 +291,7 @@ export default {
   position: absolute;
   left: 40%;
 }
-.list-item-order {
+.list-item-orders {
   font-size: 18px;
 }
 .LRmid {
@@ -365,24 +365,24 @@ export default {
   display: inline-block;
   /*border-bottom: 1px solid #999;*/
 }
-.header-my-order {
+.header-my-orders {
   font-size: 30px;
   text-align: left;
   font-weight: bolder;
 }
-.header-order-type {
+.header-orders-type {
   font-size: 15px;
   color: steelblue;
   display: flex;
   padding: 10px;
   justify-content: space-evenly;
 }
-.header-order-type > a{
+.header-orders-type > a{
   color: steelblue;
 }
 a{ text-decoration: none}
 a:hover{ text-decoration: none}
-.header-order-type > span:last-of-type{
+.header-orders-type > span:last-of-type{
   color: #222222;
   margin-right: 0px;
 }
