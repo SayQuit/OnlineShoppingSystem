@@ -127,7 +127,7 @@
 
           <div class="main-user-nav-item">
             <div class="main-user-nav-item-image" @click="gotoOrder()">
-              <img src="../assets/orders.svg" class="mid" />
+              <img src="../assets/order.svg" class="mid" />
             </div>
             <div class="main-user-nav-item-desc">订单</div>
           </div>
@@ -246,7 +246,7 @@ export default {
     this.store = useStore();
     // console.log(this.store.state);
     this.user = this.store.state.userInfo;
-    console.log(this.user);
+    // console.log(this.user);
     // console.log(this.store.state);
   },
   methods: {

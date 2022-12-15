@@ -119,6 +119,7 @@ export default {
     this.user = this.store.state.userInfo;
     this.getList();
   },
+
   mounted() {},
   methods: {
     goPage(pageName) {

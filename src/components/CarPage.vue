@@ -24,7 +24,9 @@
       >
         登录
       </div>
-      <div class="header1-login" @click="gotoOrder()" v-else>{{ user.username }}的订单</div>
+      <div class="header1-login" @click="gotoOrder()" v-else>
+        {{ user.username }}的订单
+      </div>
       <div
         class="header1-register"
         @click="goPage('RegisterPage')"
@@ -36,8 +38,8 @@
 
     <div class="header">
       <div class="header-shopping-car">
-        <span style="color:white">我的购物车</span>
-        <span><button>结算</button></span>
+        <span style="color: white">我的购物车</span>
+        <span><button @click="handleBuy()">结算</button></span>
       </div>
       <div class="header-select-all">
         <!-- <span>
@@ -48,32 +50,37 @@
       </div>
     </div>
     <div class="list">
+      <template v-for="(item, index) in list" :key="item">
+        <div class="list-item" v-if="list.length != 0">
+          <input
+            type="checkbox"
+            class="TBmid"
+            v-model="item.isSelect"
+            style="cursor: pointer"
+          />
+          <img src="../assets/good.jpg" />
+          <div class="list-item-detail TBmid">
+            {{ item.goodsName }}
+          </div>
+          <div class="main-detail-cont-num TBmid">
+            <div @click="handleChangeNum(-1, index)">-</div>
+            <div>{{ item.number }}</div>
+            <div @click="handleChangeNum(1, index)">+</div>
+          </div>
 
-
-<template v-for="(item,index) in list" :key="item">
-  <div class="list-item" v-if="list.length!=0">
-    <input type="checkbox" class="TBmid" v-model="item.isSelect" style="cursor:pointer"/>
-    <img src="../assets/good.jpg" />
-    <div class="list-item-detail TBmid">
-      {{item.goodsName}}
-    </div>
-    <div class="main-detail-cont-num TBmid">
-      <div @click="handleChangeNum(-1,index)">-</div>
-      <div>{{item.number}}</div>
-      <div @click="handleChangeNum(1,index)">+</div>
-    </div>
-
-    <div class="list-item-info TBmid">
-      <div class="list-item-info-price">￥{{item.price*item.number}}</div>
-      <div class="list-item-info-opration">删除商品</div>
+          <div class="list-item-info TBmid">
+            <div class="list-item-info-price">
+              ￥{{ item.price * item.number }}
+            </div>
+            <div class="list-item-info-opration">删除商品</div>
+          </div>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 
-</div>
-  </div>
-</template>
   
   <script>
 import { useStore } from "vuex";
@@ -81,17 +88,14 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 export default {
   setup() {
-    
-    const router = useRouter();    
+    const router = useRouter();
     return {
       router,
     };
   },
   data() {
     return {
-      list: [
-        {}
-      ],
+      list: [{}],
       user: {},
       store: {},
     };
@@ -104,61 +108,128 @@ export default {
   methods: {
     getList() {
       let url = `api/shoppingcart/queryByUserId?userId=${this.user.id}`;
-      console.log(url);
       axios.get(url).then((data) => {
         console.log(data.data);
         this.list = data.data.result.itemList;
-        for(let i=0;i<this.list.length;i++){
-          this.list[i].isSelect=false
-          this.list[i].number=1
-          this.list[i].price=this.list[i].amount/this.list[i].itemCount
+        for (let i = 0; i < this.list.length; i++) {
+          this.list[i].isSelect = false;
+          this.list[i].number = this.list[i].itemCount;
+          this.list[i].price = this.list[i].amount / this.list[i].itemCount;
         }
-        console.log(this.list);
       });
     },
-    handleChangeNum(num,index) {
-      
-      if (num + this.list[index].number >= 1 &&num + this.list[index].number <= this.list[index].itemCount) {
-        console.log(num,this.list[index].number,this.list[index].itemCount);
-        this.list[index].number=num + this.list[index].number;
+    gotoSettle(json){
+      this.router.push({ name: "SettleAccount", params: { json: json } });
+    },
+    handleBuy() {
+      let amount = 0;
+
+      let order = [];
+      for (let i = 0; i < this.list.length; i++) {
+        if (this.list[i].isSelect) {
+          let k = order.length;
+          order[k] = {};
+          order[k].Amount = this.list[i].amount;
+          order[k].itemCount = this.list[i].itemCount;
+          order[k].goodsName = this.list[i].goodsName;
+          order[k].goodsName = this.list[i].goodsName;
+
+          amount += this.list[i].amount;
+        }
+      }
+
+      let data = {
+        buyerId: this.user.id,
+        sellerId: 1,
+        totalAmount: amount,
+        realAmount: amount,
+        itemList: order,
+      };
+
+      if (order.length == 0) {
+        this.$message({
+          type: "error",
+          message: "未选择商品",
+        });
+        return;
+      }
+
+      let url = `api/orderBase/createOrderBase`;
+
+      axios({
+        url: url,
+        data: data,
+        method: "post",
+        contentType: "application/json;charset=utf-8",
+      }) //传参
+        .then((res) => {
+          // console.log(res);
+          if (res.data.code == 200) {
+            let data = res.data.result;
+            let json = JSON.stringify(data);
+
+            this.list = this.list.filter((item) => {
+              return item.isSelect == false;
+            });
+
+            this.gotoSettle(json);
+          } else {
+            this.$message({
+              type: "error",
+              message: "添加失败",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message({
+            type: "error",
+            message: "添加失败",
+          });
+        });
+    },
+    handleChangeNum(num, index) {
+      if (
+        num + this.list[index].number >= 1 &&
+        num + this.list[index].number <= this.list[index].itemCount
+      ) {
+        console.log(num, this.list[index].number, this.list[index].itemCount);
+        this.list[index].number = num + this.list[index].number;
       }
     },
 
-goPage(pageName) {
-     this.router.push({ name: pageName });
-   },
-   gotoSearch() {
-     this.router.push({
-       name: "GoodList",
-       params: { keyword: this.keyword, category: "" },
-     });
-   },
+    goPage(pageName) {
+      this.router.push({ name: pageName });
+    },
+    gotoSearch() {
+      this.router.push({
+        name: "GoodList",
+        params: { keyword: this.keyword, category: "" },
+      });
+    },
 
+    gotoCar() {
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
 
-gotoCar() {
-     if (this.user == null) {
-       this.$message({
-         type: "error",
-         message: "用户未登录",
-       });
-       return;
-     }
-     
+      this.goPage("CarPage");
+    },
+    gotoOrder() {
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
 
-     this.goPage("CarPage");
-   },
-   gotoOrder() {
-     if (this.user == null) {
-       this.$message({
-         type: "error",
-         message: "用户未登录",
-       });
-       return;
-     }
-
-     this.goPage("OrderPage");
-   },
-
+      this.goPage("OrderPage");
+    },
   },
 };
 </script>
@@ -252,22 +323,21 @@ gotoCar() {
   cursor: pointer;
 }
 
-
-  .carPage {
+.carPage {
   margin: 0 auto;
   width: 1440px;
   margin-bottom: 200px;
 }
-.header-shopping-car > span:first-of-type{
+.header-shopping-car > span:first-of-type {
   font-size: 30px;
   text-align: left;
   font-weight: bolder;
 }
-.header-shopping-car > span:last-of-type{
+.header-shopping-car > span:last-of-type {
   display: flex;
   justify-content: flex-end;
 }
-.header-shopping-car > span:last-of-type > button{
+.header-shopping-car > span:last-of-type > button {
   border: none;
   background-color: #ffeb3b;
   color: #222222;
@@ -277,19 +347,19 @@ gotoCar() {
   font-weight: bold;
   margin: 10px 0;
   border-radius: 10px;
+  cursor: pointer;
 }
-.header-select-all{
+.header-select-all {
   font-size: 15px;
   color: steelblue;
   display: flex;
   padding: 10px;
   justify-content: space-around;
 }
-.header-select-all > span:last-of-type{
+.header-select-all > span:last-of-type {
   color: #222222;
   margin-right: 0px;
 }
-
 
 .list {
   width: 1440px;
@@ -298,8 +368,6 @@ gotoCar() {
   padding: 50px 0;
 }
 .list-item {
-  
-  
   box-shadow: 0px 0px 20px -8px rgba(0, 0, 0, 1);
   margin-bottom: 50px;
   width: 100%;
@@ -330,7 +398,7 @@ gotoCar() {
   position: absolute;
   left: 40%;
 }
-.list-item-orders {
+.list-item-order {
   font-size: 18px;
 }
 
@@ -381,5 +449,4 @@ gotoCar() {
   transform: translateX(-50%) translateY(-50%);
   position: absolute;
 }
-
 </style>

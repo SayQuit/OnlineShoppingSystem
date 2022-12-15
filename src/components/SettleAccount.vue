@@ -1,42 +1,88 @@
 <template>
   <div class="settleAccount">
     <div class="header">
-      <div class="header-orders-settlement">订单结算</div>
+      <div class="header-order-settlement">订单结算</div>
       <div class="header-fill-check">填写并核对订单信息</div>
     </div>
     <div class="address">
       <div class="edit-address">
         <div class="address-head">
           <span>收货人信息</span>
-          <a>新增收货地址+</a>
+          <a style="cursor: pointer" @click="addInfo()">新增收货地址+</a>
         </div>
-        <div class="address-info">
-          <span>华工小羊人</span>
-          <span>131****1618</span>
-          <span
-            >广东省 广州市 天河区 小谷围街道 外环东路382号
-            华南理工大学大学城校区</span
-          >
-          <a class="icon-beautyEdit">编辑</a>
+
+        <template v-for="(item, index) in info" :key="item">
+          <div class="address-info">
+            <span
+              style="cursor: pointer"
+              class="address-info-select"
+              v-if="item.select"
+              @click="changeInfo(index)"
+              >{{ item.name }}</span
+            >
+            <span
+              style="cursor: pointer"
+              class="address-info-notSelect"
+              v-else
+              @click="changeInfo(index)"
+              >{{ item.name }}</span
+            >
+
+            <span>{{ item.phone }}</span>
+            <span>{{ item.address }}</span>
+            <a
+              class="icon-beautyEdit"
+              style="cursor: pointer"
+              @click="deleteInfo(index)"
+              >删除</a
+            >
+          </div>
+        </template>
+
+        <div class="address-info" v-if="showEdit">
+          <div>
+            <span style="margin-right: 20px">名字</span
+            ><input type="text" v-model="editName" />
+          </div>
+          <div>
+            <span style="margin-right: 20px">手机</span
+            ><input type="text" v-model="editPhone" />
+          </div>
+          <div>
+            <span style="margin-right: 20px">地址</span
+            ><input type="text" v-model="editAddress" />
+          </div>
+          <div>
+            <span
+              style="border: 1px solid;
+                padding: 0 10px;
+                margin-right: 20px;
+                cursor: pointer;
+              "
+              @click="makeSureInfo()"
+              >确定</span
+            ><span
+              style="border: 1px solid; padding: 0 10px; cursor: pointer"
+              @click="cancelInfo()"
+              >取消</span
+            >
+          </div>
         </div>
       </div>
     </div>
 
     <div class="list">
-      <template v-for="item in list" :key="item">
-        <div class="list-item" v-if="list.length != 0">
-          <img src="../assets/good.jpg" />
+      <template v-for="item in order.itemList" :key="item">
+        <div class="list-item" v-if="order.itemList.length != 0">
           <div class="list-item-detail TBmid">
             {{ item.goodsName }}
           </div>
           <div class="main-detail-cont-num TBmid">
-            <div>{{ item.number }}</div>
+            <div>{{ item.itemCount }}</div>
           </div>
 
           <div class="list-item-info TBmid">
-            <div class="list-item-info-price">
-              ￥{{ item.price * item.number }}
-            </div>
+            <div class="list-item-info-price">￥{{ item.amount }}</div>
             <!-- <div class="list-item-info-opration">删除商品</div> -->
           </div>
         </div>
@@ -48,19 +94,16 @@
         <span>订单合计</span>
       </div>
       <div class="account-address">
-        <span><i>3</i> 件商品，总商品金额：</span>
-        <span>&yen;540.00</span>
-        <span>运费：</span>
-        <span><i>&yen;0.00</i></span>
-        <span>商品优惠：</span>
-        <span>-￥5.00</span>
+        <span
+          ><i>{{ order.itemList.length }}</i> 件商品，总商品金额：</span
+        >
+        <span>&yen;{{ totalPrice }}</span>
       </div>
       <div class="account-pay">
-        <span> 应付总额： <i>&yen;535.00 </i></span>
-        <span
-          >寄送至：广东省 广州市 天河区 小谷围街道 外环东路382号
-          华南理工大学大学城校区</span
+        <span>
+          应付总额： <i>&yen;{{ totalPrice }}</i></span
         >
+        <span>寄送至：{{ address }}</span>
       </div>
     </div>
     <div class="pay-method">
@@ -70,7 +113,9 @@
         <span class="icon-wechat">微信支付</span>
         <span>货到付款</span>
       </div>
-      <div class="account-btn"><button>提交订单</button></div>
+      <div class="account-btn">
+        <button style="cursor: pointer">提交订单</button>
+      </div>
     </div>
   </div>
 </template>
@@ -78,34 +123,136 @@
 
 <script>
 import { useStore } from "vuex";
-import axios from "axios";
 // import axios from "axios";
+import { useRouter } from "vue-router";
+
 export default {
+  setup() {
+    const router = useRouter();
+    return {
+      router,
+    };
+  },
   data() {
     return {
       list: [],
       user: {},
       store: {},
+      info: [],
+      showEdit: 0,
+      editName: "",
+      editAddress: "",
+      editPhone: "",
+      totalPrice: 0,
+      address: "",
+      order: {},
     };
   },
   beforeMount() {
     this.store = useStore();
     this.user = this.store.state.userInfo;
-    this.getList();
+    this.order = JSON.parse(this.$route.params.json);
+    this.getLocalStorageInfo();
+    this.updateAddress();
+    this.getTotalPrice();
   },
+
   methods: {
-    getList() {
-      let url = `api/shoppingcart/queryByUserId?userId=${this.user.id}`;
-      console.log(url);
-      axios.get(url).then((data) => {
-        this.list = data.data.result.itemList;
-        for (let i = 0; i < this.list.length; i++) {
-          this.list[i].number = 1;
-          this.list[i].price = this.list[i].amount / this.list[i].itemCount;
+    handleBuy() {
+      if (this.address == "") {
+        this.$message({
+          type: "error",
+          message: "未填写地址",
+        });
+        return;
+      }
+    },
+    updateAddress() {
+      for (let i = 0; i < this.info.length; i++) {
+        if (this.info[i].select == true) {
+          this.address = this.info[i].address;
+          break;
         }
-        console.log(this.list);
+      }
+    },
+    getTotalPrice() {
+      let t = 0;
+      for (let i = 0; i < this.order.itemList.length; i++) {
+        t += this.order.itemList[i].amount;
+      }
+      this.totalPrice = t;
+    },
+    deleteInfo(index) {
+      this.$confirm("是否删除该收获信息, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.info.splice(index, 1);
+          this.localStorageInfo();
+          this.updateAddress();
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    getLocalStorageInfo() {
+      if (JSON.parse(localStorage.getItem("shopping_info")))
+        this.info = JSON.parse(localStorage.getItem("shopping_info"));
+    },
+    localStorageInfo() {
+      localStorage.setItem("shopping_info", JSON.stringify(this.info));
+    },
+    addInfo() {
+      this.showEdit = 1;
+    },
+    changeInfo(index) {
+      this.clearChoose();
+      this.info[index].select = true;
+      this.localStorageInfo();
+
+      this.updateAddress();
+    },
+    clearChoose() {
+      for (let i = 0; i < this.info.length; i++) {
+        this.info[i].select = false;
+      }
+    },
+    makeSureInfo() {
+      this.clearChoose();
+      let data = {
+        address: this.editAddress,
+        name: this.editName,
+        phone: this.editPhone,
+        select: false,
+      };
+
+      this.info[this.info.length] = data;
+
+      this.info[this.info.length - 1].select = true;
+
+      this.localStorageInfo();
+      this.updateAddress();
+
+      this.$message({
+        type: "success",
+        message: "添加成功",
       });
-      // 这里后面换成当次购买订单
+
+      this.showEdit = 0;
+      (this.editAddress = ""), (this.editName = ""), (this.editPhone = "");
+    },
+    cancelInfo() {
+      this.showEdit = 0;
+      (this.editAddress = ""), (this.editName = ""), (this.editPhone = "");
     },
   },
 };
@@ -115,12 +262,10 @@ export default {
 .list {
   width: 1440px;
   margin: 50px auto;
-  border-top: 1px solid #999;
   padding: 50px 0;
   /* height: 500px; */
 }
 .list-item {
-  
   box-shadow: 0px 0px 20px -8px rgba(0, 0, 0, 1);
   margin-bottom: 50px;
   width: 100%;
@@ -151,7 +296,7 @@ export default {
   position: absolute;
   left: 40%;
 }
-.list-item-orders {
+.list-item-order {
   font-size: 18px;
 }
 .LRmid {
@@ -229,7 +374,7 @@ a:hover {
   display: inline-block;
   border-bottom: 1px solid #999;
 }
-.header-orders-settlement {
+.header-order-settlement {
   font-size: 30px;
   text-align: left;
   font-weight: bolder;
@@ -259,7 +404,7 @@ a:hover {
   padding: 20px;
   justify-content: space-between;
 }
-.address-info > span:first-of-type {
+.address-info > .address-info-select {
   width: 120px;
   height: 30px;
   border: 3px solid #349efa;
@@ -268,6 +413,20 @@ a:hover {
   margin-right: 10px;
   font-size: 16px;
   line-height: 30px;
+}
+.address-info > .address-info-notSelect {
+  width: 120px;
+  height: 30px;
+  border: 3px solid #999;
+  border-radius: 10px;
+  text-align: center;
+  margin-right: 10px;
+  font-size: 16px;
+  line-height: 30px;
+}
+.address-info > span {
+  line-height: 30px;
+  font-size: 16px;
 }
 .header-fill-check {
   width: 100%;

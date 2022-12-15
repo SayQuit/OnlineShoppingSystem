@@ -562,6 +562,12 @@ input {
 
   margin: 0 auto;
 }
+
+input{
+  border: 1px solid #999;
+  outline: none;
+  padding:0 10px;
+}
 .finishi a {
   color: white;
 }

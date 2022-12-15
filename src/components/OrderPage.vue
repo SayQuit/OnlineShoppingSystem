@@ -37,7 +37,7 @@
     <!-- <div class="header">
       
       <span style="color:white">我的购物车</span>
-      <div class="header-orders-type">
+      <div class="header-order-type">
         <a href="">全部订单</a>
         <a href="">待付款</a>
         <a href="">待发货</a>
@@ -140,15 +140,10 @@ export default {
 
 
 
-      let url = `api/shoppingcart/queryByUserId?userId=${this.user.id}`;
+      let url = `api/orderBase/queryOrderBaseByUserId?userId=${this.user.id}`;
       console.log(url);
       axios.get(url).then((data) => {
-        this.list = data.data.result.itemList;
-        for (let i = 0; i < this.list.length; i++) {
-          this.list[i].number = 1;
-          this.list[i].price = this.list[i].amount / this.list[i].itemCount;
-        }
-        console.log(this.list);
+        console.log(data);
       });
 
       // 这里后面换成历史订单
@@ -291,7 +286,7 @@ export default {
   position: absolute;
   left: 40%;
 }
-.list-item-orders {
+.list-item-order {
   font-size: 18px;
 }
 .LRmid {
@@ -365,24 +360,24 @@ export default {
   display: inline-block;
   /*border-bottom: 1px solid #999;*/
 }
-.header-my-orders {
+.header-my-order {
   font-size: 30px;
   text-align: left;
   font-weight: bolder;
 }
-.header-orders-type {
+.header-order-type {
   font-size: 15px;
   color: steelblue;
   display: flex;
   padding: 10px;
   justify-content: space-evenly;
 }
-.header-orders-type > a{
+.header-order-type > a{
   color: steelblue;
 }
 a{ text-decoration: none}
 a:hover{ text-decoration: none}
-.header-orders-type > span:last-of-type{
+.header-order-type > span:last-of-type{
   color: #222222;
   margin-right: 0px;
 }

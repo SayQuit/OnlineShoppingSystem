@@ -70,11 +70,14 @@
           </div>
           <!-- <div class="main-detail-cont-sell">销量:193</div> -->
           <div class="main-detail-cont-price">￥{{ detail.price }}</div>
-          <div class="main-detail-cont-num">
-            <div @click="handleChangeNum(-1)" style="border: none">-</div>
-            <div style="background: #ddd; border: none">{{ number }}</div>
-            <div @click="handleChangeNum(1)" style="border: none">+</div>
-          </div>
+            <el-input-number
+              v-model="number"
+              :min="1"
+              :max="this.detail.number"
+              label="商品数量"
+              style="margin-top: 80px"
+            ></el-input-number>
+
           <div class="main-detail-cont-opration">
             <div class="main-detail-cont-opration-add" @click="handlePostCar">
               加入购物车
@@ -144,12 +147,10 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$route.params);
     this.detail = JSON.parse(this.$route.params.good);
     this.store = useStore();
     this.user = this.store.state.userInfo;
 
-    // console.log(this.detail);
   },
   methods: {
     handleChangeNum(num) {
@@ -169,9 +170,9 @@ export default {
         return;
       }
       // console.log(this.detail);
-      let goods = {
+      let good = {
         Amount: this.detail.price * this.number,
-        itemCount: this.number,
+        itemCount: JSON.stringify(this.number),
         goodsName: this.detail.name,
         goodsId: this.detail.id,
       };
@@ -180,9 +181,8 @@ export default {
 
       axios({
         url: url,
-        data: goods,
+        data: good,
         method: "post",
-        contentType: "application/json;charset=utf-8"
       }) //传参
         .then((res) => {
           // console.log(res);
@@ -220,6 +220,9 @@ export default {
     gotoSearch() {
       this.router.push({ name: "GoodList", params: { keyword: this.keyword } });
     },
+    gotoSettle(json){
+      this.router.push({ name: "SettleAccount", params: { json: json } });
+    },
     handleBuy() {
       if (this.user == null) {
         this.$message({
@@ -228,22 +231,21 @@ export default {
         });
         return;
       }
-      let good =[
+      let good = [
         {
           Amount: this.detail.price * this.number,
-          itemCount: this.number,
+          itemCount: JSON.stringify(this.number),
           goodsName: this.detail.name,
-          goodsId: this.detail.id
+          goodsId: this.detail.id,
         },
-          ]
-      ;
+      ];
 
       let data = {
         buyerId: this.user.id,
         sellerId: 1,
         totalAmount: this.detail.price * this.number,
         realAmount: this.detail.price * this.number,
-        itemList: good
+        itemList: good,
       };
       // let testStr = encodeURIComponent(JSON.stringify(footerData));
 
@@ -253,12 +255,15 @@ export default {
         url: url,
         data: data,
         method: "post",
-        contentType: "application/json;charset=utf-8"
+        contentType:"application/json;charset=utf-8"
       }) //传参
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.code == 200) {
-            console.log("success");
+            let data=res.data.result
+            let json=JSON.stringify(data)
+            this.gotoSettle(json)
+
           } else {
             this.$message({
               type: "error",
@@ -484,6 +489,7 @@ export default {
 .main-detail-cont-price {
   font-size: 24px;
   color: #ce0000;
+  margin-top: 50px;
 }
 .main-detail-cont-opration {
   margin-top: 15%;

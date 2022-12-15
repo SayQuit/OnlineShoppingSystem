@@ -25,35 +25,8 @@
             <tr>
               <td><h1>登陆密码:</h1></td>
               <td><input type="password" v-model="psw" /></td>
-              <!--              <td><p class="input_error">登陆密码格式不正确，请重新输入</p></td>-->
             </tr>
 
-            <!--            <tr>-->
-            <!--              <td></td>-->
-            <!--              <td class="safe">-->
-            <!--                <p>安全程度</p>-->
-            <!--                <p class="red safeBlock">弱</p>-->
-            <!--                <p class="green safeBlock">中</p>-->
-            <!--                <p class="yellow safeBlock">强</p>-->
-            <!--              </td>-->
-            <!--            </tr>-->
-
-            <!--            <tr>-->
-            <!--              <td><h1>确认密码:</h1></td>-->
-            <!--              <td><input type="text" /></td>-->
-            <!--              <td><p class="input_error">确认密码格式不正确，请重新输入</p></td>-->
-            <!--            </tr>-->
-
-            <!--            <tr>-->
-            <!--              <td></td>-->
-            <!--              <td>-->
-            <!--                <div class="protocal">-->
-            <!--                  <input type="checkbox" />-->
-            <!--                  <p>同意协议并注册</p>-->
-            <!--                  <a href="https://cdn.awsbj0.fds.api.mi-img.com/huami-amazfit-production/0_agreements/zh-CNAgreement-20170809.html">《知晓用户协议》</a>-->
-            <!--                </div>-->
-            <!--              </td>-->
-            <!--            </tr>-->
           </table>
         </div>
 
@@ -310,6 +283,12 @@ table {
   top: 50%;
   margin-top: -20px;
 }
+input{
+  border: 1px solid #999;
+  outline: none;
+  padding:0 10px;
+}
+
 .search > a:last-of-type:hover {
   color: #c40000;
 }

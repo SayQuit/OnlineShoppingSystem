@@ -391,6 +391,12 @@
   .guild > div:last-of-type > div > h1 {
     margin-bottom: 5px;
   }
+
+  input{
+  border: 1px solid #999;
+  outline: none;
+  padding:0 10px;
+}
   .registerBlock {
     width: auto;
     height: 520px;
