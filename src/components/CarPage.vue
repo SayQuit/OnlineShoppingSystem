@@ -58,7 +58,7 @@
             v-model="item.isSelect"
             style="cursor: pointer"
           />
-          <img src="../assets/good.jpg" />
+          <img :src="item.goodsPicurl" />
           <div class="list-item-detail TBmid">
             {{ item.goodsName }}
           </div>
@@ -72,7 +72,12 @@
             <div class="list-item-info-price">
               ￥{{ item.price * item.number }}
             </div>
-            <div class="list-item-info-opration">删除商品</div>
+            <div
+              class="list-item-info-opration"
+              @click="handleDeleteGood(index)"
+            >
+              删除商品
+            </div>
           </div>
         </div>
       </template>
@@ -95,30 +100,107 @@ export default {
   },
   data() {
     return {
-      list: [{}],
+      list: [],
       user: {},
       store: {},
+      carId: "",
     };
   },
   beforeMount() {
     this.store = useStore();
     this.user = this.store.state.userInfo;
     this.getList();
+    
   },
   methods: {
     getList() {
       let url = `api/shoppingcart/queryByUserId?userId=${this.user.id}`;
       axios.get(url).then((data) => {
-        console.log(data.data);
         this.list = data.data.result.itemList;
         for (let i = 0; i < this.list.length; i++) {
           this.list[i].isSelect = false;
           this.list[i].number = this.list[i].itemCount;
           this.list[i].price = this.list[i].amount / this.list[i].itemCount;
         }
+        this.carId = data.data.result.shoppingcartId;
+        // console.log(this.carId);
+        console.log(data);
       });
     },
-    gotoSettle(json){
+    handleDeleteGood(index) {
+      this.$confirm("是否删除该收获信息, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.deleteGood(index)
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    deleteGood(index) {
+      let newList = this.list;
+
+      let amount = 0;
+
+      let order = [];
+      for (let i = 0; i < newList.length; i++) {
+        if(i==index)continue;
+        let k = order.length;
+        order[k] = {};
+        order[k].Amount = newList[i].amount;
+        order[k].itemCount = newList[i].itemCount;
+        order[k].goodsName = newList[i].goodsName;
+        order[k].goodsId = newList[i].goodsId;
+
+        amount += newList[i].amount;
+      }
+
+      // console.log(order);
+      let data = {
+        ShoppingcartId: this.carId,
+        totalAmount: amount,
+        realAmount: amount,
+        itemList: order,
+      };
+
+      let url = `api/shoppingcart/updateShoppingcart`;
+
+      axios({
+        url: url,
+        data: data,
+        method: "post",
+        contentType: "application/json;charset=utf-8",
+      }) //传参
+        .then((res) => {
+          // console.log(res);
+          if (res.data.code == 200) {
+            console.log(res);
+            this.$message({
+              type: "error",
+              message: "删除成功",
+            });
+          } else {
+            this.$message({
+              type: "error",
+              message: "删除失败",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message({
+            type: "error",
+            message: "删除失败",
+          });
+        });
+    },
+    gotoSettle(json) {
       this.router.push({ name: "SettleAccount", params: { json: json } });
     },
     handleBuy() {
@@ -132,7 +214,7 @@ export default {
           order[k].Amount = this.list[i].amount;
           order[k].itemCount = this.list[i].itemCount;
           order[k].goodsName = this.list[i].goodsName;
-          order[k].goodsName = this.list[i].goodsName;
+          order[k].goodsId = this.list[i].goodsId;
 
           amount += this.list[i].amount;
         }
@@ -384,6 +466,10 @@ export default {
 .list-item div {
   display: inline-block;
   vertical-align: top;
+  cursor: pointer;
+}
+.list-item div:hover {
+  color: #349efa;
 }
 .list-item input {
   left: 3%;

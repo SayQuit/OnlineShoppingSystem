@@ -74,6 +74,7 @@
     <div class="list">
       <template v-for="item in order.itemList" :key="item">
         <div class="list-item" v-if="order.itemList.length != 0">
+          <img src="../assets/goodgood.jpg">
           <div class="list-item-detail TBmid">
             {{ item.goodsName }}
           </div>
@@ -277,7 +278,7 @@ export default {
   width: 200px;
   height: 160px;
   margin-top: 25px;
-  margin-left: 15%;
+  margin-left: 5%;
 }
 .list-item div {
   display: inline-block;

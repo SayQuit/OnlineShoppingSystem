@@ -24,7 +24,9 @@
       >
         登录
       </div>
-      <div class="header1-login" @click="gotoOrder()" v-else>{{ user.username }}的订单</div>
+      <div class="header1-login" @click="gotoOrder()" v-else>
+        {{ user.username }}的订单
+      </div>
       <div
         class="header1-register"
         @click="goPage('RegisterPage')"
@@ -34,37 +36,29 @@
       </div>
     </div>
 
-    <!-- <div class="header">
-      
-      <span style="color:white">我的购物车</span>
-      <div class="header-order-type">
-        <a href="">全部订单</a>
-        <a href="">待付款</a>
-        <a href="">待发货</a>
-        <a href="">待评价</a>
-        <span>价格</span>
-      </div>
-    </div> -->
-    <div class="list">
-    <template v-for="item in list" :key="item">
-      <div class="list-item" v-if="list.length != 0">
-        <img src="../assets/good.jpg" />
-        <div class="list-item-detail TBmid">
-          {{ item.goodsName }}
-        </div>
-        <div class="main-detail-cont-num TBmid">
-          <div>{{ item.number }}</div>
-        </div>
 
-        <div class="list-item-info TBmid">
-          <div class="list-item-info-price">
-            ￥{{ item.price * item.number }}
+    <div class="list">
+      <template v-for="item in list" :key="item">
+        <template v-for="item2 in item.itemList" :key="item2">
+          <div class="list-item" v-if="list.length != 0">
+           
+          
+            <img src="../assets/goodgood.jpg">
+            <div class="list-item-detail TBmid">
+              {{ item2.goodsName }}
+            </div>
+            <div class="main-detail-cont-num TBmid">
+              <div>{{ item2.itemCount }}</div>
+            </div>
+
+            <div class="list-item-info TBmid">
+              <div class="list-item-info-price">￥{{ item2.amount }}</div>
+              <!-- <div class="list-item-info-opration">删除商品</div> -->
+            </div>
           </div>
-          <!-- <div class="list-item-info-opration">删除商品</div> -->
-        </div>
-      </div>
-    </template>
-  </div>
+        </template>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -75,10 +69,8 @@ import axios from "axios";
 
 import { useRouter } from "vue-router";
 export default {
-  
   setup() {
-    
-    const router = useRouter();    
+    const router = useRouter();
     return {
       router,
     };
@@ -96,12 +88,7 @@ export default {
     this.getList();
   },
   methods: {
-    
-
-
-
-
- goPage(pageName) {
+    goPage(pageName) {
       this.router.push({ name: pageName });
     },
     gotoSearch() {
@@ -111,8 +98,7 @@ export default {
       });
     },
 
-
- gotoCar() {
+    gotoCar() {
       if (this.user == null) {
         this.$message({
           type: "error",
@@ -120,7 +106,6 @@ export default {
         });
         return;
       }
-      
 
       this.goPage("CarPage");
     },
@@ -137,13 +122,11 @@ export default {
     },
 
     getList() {
-
-
-
       let url = `api/orderBase/queryOrderBaseByUserId?userId=${this.user.id}`;
-      console.log(url);
+      // console.log(url);
       axios.get(url).then((data) => {
         console.log(data);
+        this.list = data.data.result;
       });
 
       // 这里后面换成历史订单
@@ -160,7 +143,7 @@ export default {
   
   
   <style scoped>
-  .header1 {
+.header1 {
   padding-bottom: 30px;
   width: 1440px;
   display: inline-block;
@@ -255,7 +238,6 @@ export default {
   /* height: 500px; */
 }
 .list-item {
-  
   box-shadow: 0px 0px 20px -8px rgba(0, 0, 0, 1);
   margin-bottom: 50px;
   width: 100%;
@@ -319,10 +301,9 @@ export default {
   vertical-align: top;
   background-color: #fff;
   line-height: 50px;
-  cursor: pointer;  
+  cursor: pointer;
   border: 1px solid #999;
   border-radius: 10px;
-
 }
 .main-detail-cont-num > input {
   vertical-align: top;
@@ -372,12 +353,16 @@ export default {
   padding: 10px;
   justify-content: space-evenly;
 }
-.header-order-type > a{
+.header-order-type > a {
   color: steelblue;
 }
-a{ text-decoration: none}
-a:hover{ text-decoration: none}
-.header-order-type > span:last-of-type{
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+.header-order-type > span:last-of-type {
   color: #222222;
   margin-right: 0px;
 }

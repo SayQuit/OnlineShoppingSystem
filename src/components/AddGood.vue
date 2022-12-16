@@ -74,7 +74,7 @@
           </tr>
 
           <tr>
-            <td style="padding: 10px"><h1>图片地址:</h1></td>
+            <td style="padding: 10px"><h1>商品logo:</h1></td>
             <td>
               <input
                 type="text"
@@ -95,24 +95,47 @@
             </td>
           </tr>
 
-          <tr>
+          <tr style="position: relative">
             <td style="padding: 10px"><h1>商品数量:</h1></td>
             <el-input-number
               v-model="goodInfo.number"
               :min="1"
               :max="100"
               label="商品数量"
-              style="margin-top: 25px"
+              style="margin-top: 3%"
             ></el-input-number>
           </tr>
+
+          <tr>
+            <td style="padding: 10px"><h1>商品图片:</h1></td>
+            <el-button
+              type="primary"
+              style="margin-top: 3%"
+              @click="addPicLength()"
+              >添加</el-button
+            >
+          </tr>
         </table>
+
+        <template v-for="item in goodInfo.piclist.length" :key="item">
+          <div style="margin-top: 10px">
+            <span style="margin-left: 15%">{{ item }}</span>
+            <el-input
+              v-model="goodInfo.piclist[item-1]"
+              style="margin-left: 10px; width: 60%"
+            ></el-input>
+            <el-button type="danger" style="margin-left: 10px;" @click="handleDeletePic(item-1)">删除</el-button>
+          </div>
+        </template>
       </div>
 
       <div v-show="goodInfo.logo">
         <img :src="goodInfo.logo" style="cursor: pointer" />
       </div>
     </div>
-    <div class="button" style="display: block" @click="handlePostGood">确定上传</div>
+    <div class="button" style="display: block" @click="handlePostGood">
+      确定上传
+    </div>
   </div>
 </template>
   
@@ -131,29 +154,11 @@ export default {
   },
   data() {
     return {
+      temp: "",
       user: {},
       store: {},
       category: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
+        
       ],
       value: "",
 
@@ -170,6 +175,10 @@ export default {
   beforeMount() {
     this.store = useStore();
     this.user = this.store.state.userInfo;
+
+  },
+  mounted(){
+    this.getCate()
   },
   methods: {
     goPage(pageName) {
@@ -193,6 +202,27 @@ export default {
 
       this.goPage("CarPage");
     },
+
+    getCate(){
+      let url='api/index/queryAllCat'
+      axios.get(url).then((data) => {
+        console.log(data);
+        if (data.data.code == 200) {
+          for(let i=0;i<30;i++){
+            this.category[i]={}
+            this.category[i].label=data.data.result[i].name
+            this.category[i].value='选项'+(Number(i+1))
+          }
+        }
+      });
+    },
+    handleDeletePic(index){
+      this.goodInfo.piclist.splice(index,1)
+    },
+    addPicLength() {
+      let k = this.goodInfo.piclist.length;
+      this.goodInfo.piclist[k] = "";
+    },
     gotoOrder() {
       if (this.user == null) {
         this.$message({
@@ -204,22 +234,35 @@ export default {
 
       this.goPage("OrderPage");
     },
-    handlePostGood(){
-
-      if(this.goodInfo.name==""||this.goodInfo.number==""||this.goodInfo.price==""||this.goodInfo.logo==""||this.goodInfo.category==""){
+    handlePostGood() {
+      if (
+        this.goodInfo.name == "" ||
+        this.goodInfo.number == "" ||
+        this.goodInfo.price == "" ||
+        this.goodInfo.logo == "" ||
+        this.goodInfo.category == ""
+      ) {
         this.$message({
           type: "error",
           message: "部分信息未填写",
         });
         return;
       }
+      for (let i = 0; i < this.goodInfo.piclist.length; i++) {
+        if (this.goodInfo.piclist[i] == "") {
+          this.$message({
+            type: "error",
+            message: "图片地址不完整",
+          });
+        }
+      }
       let url = `api/admin/addGoods`;
-      this.goodInfo.category="4K超高清"
+      this.goodInfo.category = "4K超高清";
       axios({
         url: url,
         data: this.goodInfo,
         method: "post",
-        contentType:"application/json;charset=utf-8"
+        contentType: "application/json;charset=utf-8",
       }) //传参
         .then((res) => {
           console.log(res);
@@ -231,9 +274,7 @@ export default {
             message: "添加失败",
           });
         });
-
-
-    }
+    },
   },
 };
 </script>
@@ -552,5 +593,10 @@ input {
   margin: 50px;
   cursor: pointer;
   float: right;
+}
+.TBmid {
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
 }
 </style>

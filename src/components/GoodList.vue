@@ -12,9 +12,7 @@
           placeholder="请输入"
           v-model="keyword"
         />
-        <div class="header-search-click"  @click="getList()">
-          搜索
-        </div>
+        <div class="header-search-click" @click="getList()">搜索</div>
       </div>
 
       <div class="header-car" @click="gotoCar()">购物车结算</div>
@@ -43,10 +41,14 @@
             <div class="condition-block-title">分类:</div>
             <div class="condition-block-item">
               <template v-for="item in category" :key="item">
-                <div @click="changeCategoryName(item.name)" :class="{'isCondition':item.name==categoryName}">{{item.name}}</div>
+                <div
+                  @click="changeCategoryName(item.name)"
+                  :class="{ isCondition: item.name == categoryName }"
+                >
+                  {{ item.name }}
+                </div>
               </template>
             </div>
-
           </div>
         </div>
       </div>
@@ -62,19 +64,15 @@
           </div>
         </template>
 
-        <div class="page">
-          <span class="page-num" @click="subPage()">&lt;</span>
-          <template v-for="item in maxPage" :key="item">
-            <span class="page-num" v-if="item!=Number(pageNo+1)" @click="changePage(item)">{{item}}</span>
-            <span class="page-num page-choosenum" v-else >{{item}}</span>
-          </template>
-
-          <span class="page-num" @click="addPage()">></span>
-          <!-- <span>
-            <span>跳至</span>
-            <input type="number" class="page-input" />
-            <span>页</span>
-          </span> -->
+        <div class="block" style="margin-top: 40px">
+          <el-pagination
+            layout="prev, pager, next"
+            :total="maxPage * 10"
+            background
+            @current-change="changePageNo"
+            :current-page="pageNo + 1"
+          >
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -90,7 +88,6 @@ export default {
     const router = useRouter();
     return {
       router,
-
     };
   },
   data() {
@@ -99,77 +96,14 @@ export default {
       keyword: "",
       categoryName: "",
       user: null,
-      category:[
-        {
-          name:'大家电',
-        },
-        {
-          name:'数码相机',
-        },
-        {
-          name:'海外购',
-        },
-        {
-          name:'大家电',
-        },
-        {
-          name:'数码相机',
-        },
-        {
-          name:'海外购',
-        },
-        {
-          name:'大家电',
-        },
-        {
-          name:'数码相机',
-        },
-        {
-          name:'海外购',
-        },
-        {
-          name:'大家电',
-        },
-        {
-          name:'数码相机',
-        },
-        {
-          name:'海外购',
-        },
-        {
-          name:'大家电',
-        },
-        {
-          name:'数码相机',
-        },
-        {
-          name:'海外购',
-        },
-        {
-          name:'大家电',
-        },
-        {
-          name:'数码相机',
-        },
-        {
-          name:'海外购',
-        },
-        {
-          name:'大家电',
-        },
-        {
-          name:'数码相机',
-        },
-        {
-          name:'海外购',
-        },
+      category: [
+        
       ],
-      pageNo:0,
-      maxPage:9,
+      pageNo: 0,
+      maxPage: 10,
     };
   },
-  mounted() {
-  },
+  mounted() {},
   beforeMount() {
     this.store = useStore();
     this.user = this.store.state.userInfo;
@@ -177,11 +111,17 @@ export default {
     this.categoryName = this.$route.params.category;
 
     this.getList();
+    this.getCate();
   },
 
   methods: {
     goPage(pageName) {
       this.router.push({ name: pageName });
+    },
+    changePageNo(page) {
+      this.pageNo = page - 1;
+      this.getList();
+      window.scrollTo(0, 0);
     },
     gotoCar() {
       if (this.user == null) {
@@ -194,17 +134,10 @@ export default {
 
       this.goPage("CarPage");
     },
-    changePage(item){
-      this.pageNo=item-1
-      this.getList()
-    },
-    subPage(){
-      this.pageNo=this.pageNo-1
-      this.getList()
-    },
-    addPage(){
-      this.pageNo=this.pageNo+1
-      this.getList()
+
+    changePage(item) {
+      this.pageNo = item - 1;
+      this.getList();
     },
     gotoDetail(item) {
       // console.log(JSON.stringify(item));
@@ -217,33 +150,46 @@ export default {
       console.log(this.keyword);
       let url = "";
       if (this.keyword != "" && this.categoryName == "") {
+        this.pageNo=0;
         url = `api/index/queryGoodsByName?pageNo=${this.pageNo}&goodsName=${this.keyword}`;
       } else if (this.keyword == "" && this.categoryName != "") {
+        this.pageNo=0;
         url = `api/index/queryGoodsByCat?pageNo=${this.pageNo}&name=${this.categoryName}`;
       } else if (this.keyword != "" && this.categoryName != "") {
+        this.pageNo=0;
         url = `api/index/queryGoodsByCatAndName?pageNo=${this.pageNo}&category=${this.categoryName}&goodsName=${this.keyword}`;
       } else {
         url = `api/index/queryGoodsByName?pageNo=${this.pageNo}&goodsName=${this.keyword}`;
       }
 
-      console.log(url);
-      console.log(this.keyword);
       axios.get(url).then((data) => {
         if (data.data.code == 200) {
-          this.list = data.data.result;
+          this.list = data.data.result.goodlists;
+          this.maxPage=data.data.result.maxPageNo;
         }
-        console.log(data);
+        // console.log(data);
+      });
+    },
+
+    getCate(){
+      let url='api/index/queryAllCat'
+      axios.get(url).then((data) => {
+        if (data.data.code == 200) {
+          for(let i=0;i<30;i++){
+            this.category[i]=data.data.result[i]
+          }
+        }
       });
     },
 
     gotoSearch() {
       this.router.push({ name: "GoodList", params: { keyword: this.keyword } });
     },
-    changeCategoryName(name){
-      if(this.categoryName==name)this.categoryName=''
-      else this.categoryName=name
-      this.getList()
-    }
+    changeCategoryName(name) {
+      if (this.categoryName == name) this.categoryName = "";
+      else this.categoryName = name;
+      this.getList();
+    },
   },
 };
 </script>
@@ -384,7 +330,7 @@ li {
   text-align: center;
   cursor: pointer;
 }
-.condition-block-item  div {
+.condition-block-item div {
   text-align: center;
   height: 32px;
 
@@ -395,7 +341,7 @@ li {
   line-height: 32px;
   border-radius: 10px;
   cursor: pointer;
-    margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 .isCondition {
   background-color: #349efa;

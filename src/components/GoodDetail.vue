@@ -25,7 +25,7 @@
       >
         登录
       </div>
-      <div class="header-login" v-else>{{ user.username }}的订单</div>
+      <div class="header-login" v-else @click="gotoOrder">{{ user.username }}的订单</div>
       <div
         class="header-register"
         @click="goPage('RegisterPage')"
@@ -89,41 +89,6 @@
         </div>
       </div>
 
-      <!-- <div class="comment bgrwhite">
-        <h1 class="registerTitle">评论</h1>
-        <div class="comment-item">
-          <div>用户13148739454</div>
-          <div>
-            外形外观：窄边框，43寸，看起来很精致的感觉。小米的产品做得越来越好，值得期待。
-            运行速度：各个软件之间切换，很顺畅，可以自己下载安装不同的影视软件，方便追剧。
-            屏幕音效：高清，就是不同，特别是播放一些4k片源，或高清的纪录片，感觉特别好看。
-            功能效果：音量够大，开大了也不会破音。 送装一体：自己安装，很方便。
-          </div>
-          <div>2017-10-18</div>
-        </div>
-
-        <div class="comment-item">
-          <div>用户13148739454</div>
-          <div>
-            2022新款，卧室的电视柜小，43寸尺寸刚刚好！
-            没有挂墙，直接自己动手把两个脚装好了，方便的很！电视保护膜很好，撕掉很顺畅，也不留痕迹！
-            色彩鲜艳，画质清晰，声音够响，到底是4k的，装好电视家后看电视很舒服！
-            小米的桌面系统很不错，用着很顺手，各类软件安装也很方便，该款电视内置了小爱同学，再配合遥控器语音，操作太方便了！
-            开机有广告，还能接受，看各类视频电影需要开通小米会员，可以理解！需要提醒的是该款电视是带杜比dts音效的，但只有开通会员才能享受！
-          </div>
-          <div>2017-10-18</div>
-        </div>
-
-        <div class="comment-item">
-          <div>用户13148739454</div>
-          <div>
-            小米电视 X50 50英寸 金属全面屏 4KHDR超高清 运动补偿 远场语音
-            智能教育电视L50M5-RK红米 Redmi
-            电视，金属边框全面屏耀眼登场，让画面突破边界约束，带来更沉浸的视觉体验。质感，耐用，好看，真正的艺术在细节里。画面流畅，重低音音响系统，大存储，丰富接口。小米品质保证，京东服务一流！
-          </div>
-          <div>2017-10-18</div>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -144,12 +109,16 @@ export default {
       detail: {},
       number: 1,
       user: null,
+      keyword:''
     };
   },
   mounted() {
     this.detail = JSON.parse(this.$route.params.good);
     this.store = useStore();
     this.user = this.store.state.userInfo;
+
+    
+    console.log(this.detail);
 
   },
   methods: {
@@ -161,6 +130,17 @@ export default {
     goPage(pageName) {
       this.router.push({ name: pageName });
     },
+    gotoOrder() {
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
+
+      this.goPage("OrderPage");
+    },
     handlePostCar() {
       if (this.user == null) {
         this.$message({
@@ -169,7 +149,6 @@ export default {
         });
         return;
       }
-      // console.log(this.detail);
       let good = {
         Amount: this.detail.price * this.number,
         itemCount: JSON.stringify(this.number),
@@ -218,7 +197,10 @@ export default {
       this.goPage("CarPage");
     },
     gotoSearch() {
-      this.router.push({ name: "GoodList", params: { keyword: this.keyword } });
+      this.router.push({
+        name: "GoodList",
+        params: { keyword: this.keyword, category: "" },
+      });
     },
     gotoSettle(json){
       this.router.push({ name: "SettleAccount", params: { json: json } });

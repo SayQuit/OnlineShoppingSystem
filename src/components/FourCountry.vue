@@ -24,7 +24,9 @@
       >
         登录
       </div>
-      <div class="header-login" v-else>{{ user.username }}的订单</div>
+      <div class="header-login" v-else @click="gotoOrder">
+        {{ user.username }}的订单
+      </div>
       <div
         class="header-register"
         @click="goPage('RegisterPage')"
@@ -64,24 +66,15 @@
       </template>
     </div>
 
-    <div class="page">
-      <span class="page-num" @click="subPage()">&lt;</span>
-      <template v-for="item in maxPage" :key="item">
-        <span
-          class="page-num"
-          v-if="item != Number(pageNo + 1)"
-          @click="changePage(item)"
-          >{{ item }}</span
-        >
-        <span class="page-num page-choosenum" v-else>{{ item }}</span>
-      </template>
-      <span class="page-num" @click="addPage()">></span>
-
-      <!-- <span>
-        <span>跳至</span>
-        <input type="number" class="page-input" />
-        <span>页</span>
-      </span> -->
+    <div class="block" style="margin-top: 40px">
+      <el-pagination
+        layout="prev, pager, next"
+        :total="maxPage * 10"
+        background
+        @current-change="changePageNo"
+        :current-page="pageNo + 1"
+      >
+      </el-pagination>
     </div>
 
     <div class="footer">
@@ -114,13 +107,12 @@ export default {
       maxPage: 9,
     };
   },
-  beforeMount() {
+
+  mounted() {
     this.store = useStore();
     this.user = this.store.state.userInfo;
     this.getList();
   },
-
-  mounted() {},
   methods: {
     goPage(pageName) {
       this.router.push({ name: pageName });
@@ -136,15 +128,35 @@ export default {
       let url = "api/index/queryGoods?pageNo=0";
       axios.get(url).then((data) => {
         if (data.data.code == 200) {
-          this.list = data.data.result;
+          this.list = data.data.result.goodlists;
+          this.maxPage = data.data.result.maxPageNo;
         }
-        console.log(this.list);
+        // console.log(data);
         // let url=`/shoppingcart/addGoodsItem?goods=${this.list}`
         // console.log(url);
       });
     },
+    changePageNo(page) {
+      this.pageNo = page - 1;
+      this.getList();
+      window.scrollTo(0, 0);
+    },
     gotoSearch() {
-      this.router.push({ name: "GoodList", params: { keyword: this.keyword } });
+      this.router.push({
+        name: "GoodList",
+        params: { keyword: this.keyword, category: "" },
+      });
+    },
+    gotoOrder() {
+      if (this.user == null) {
+        this.$message({
+          type: "error",
+          message: "用户未登录",
+        });
+        return;
+      }
+
+      this.goPage("OrderPage");
     },
     gotoCar() {
       if (this.user == null) {
@@ -158,21 +170,10 @@ export default {
       this.goPage("CarPage");
     },
 
-
-    changePage(item){
-      this.pageNo=item-1
-      this.changeNo()
-      this.getList()
-    },
-    subPage(){
-      this.pageNo=this.pageNo-1
-      this.changeNo()
-      this.getList()
-    },
-    addPage(){
-      this.pageNo=this.pageNo+1
-      this.changeNo()
-      this.getList()
+    changePage(item) {
+      this.pageNo = item - 1;
+      this.changeNo();
+      this.getList();
     },
   },
 };
