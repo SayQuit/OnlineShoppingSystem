@@ -281,7 +281,7 @@ export default {
         return;
       }
 
-      this.goPage("AddGood");
+      this.goPage("AddCategory");
     },
     gotoAddGood(){
       if (this.user == null) {

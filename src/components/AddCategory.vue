@@ -140,7 +140,7 @@ export default {
       this.goPage("OrderPage");
     },
     handlePostCategory() {
-      if (this.category.name == "" ||this.category.icon == "") {
+      if (this.category.name == "" || this.category.icon == "") {
         this.$message({
           type: "error",
           message: "部分信息未填写",
@@ -155,7 +155,21 @@ export default {
         contentType: "application/json;charset=utf-8",
       }) //传参
         .then((res) => {
-          console.log(res);
+          if (res.data.code == 200) {
+            this.$message({
+              type: "success",
+              message: "添加成功",
+            });
+            this.category = {
+              name: "",
+              icon: "",
+            };
+          } else {
+            this.$message({
+              type: "error",
+              message: "添加失败",
+            });
+          }
         })
         .catch((err) => {
           console.log(err);

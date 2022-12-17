@@ -42,30 +42,31 @@
         <div class="address-info" v-if="showEdit">
           <div>
             <span style="margin-right: 20px">名字</span
-            ><input type="text" v-model="editName" />
+            ><el-input
+              type="text"
+              v-model="editName"
+              style="width: 200px"
+            ></el-input>
           </div>
           <div>
             <span style="margin-right: 20px">手机</span
-            ><input type="text" v-model="editPhone" />
+            ><el-input
+              type="text"
+              v-model="editPhone"
+              style="width: 200px"
+            ></el-input>
           </div>
           <div>
             <span style="margin-right: 20px">地址</span
-            ><input type="text" v-model="editAddress" />
+            ><el-input
+              type="text"
+              v-model="editAddress"
+              style="width: 200px"
+            ></el-input>
           </div>
           <div>
-            <span
-              style="border: 1px solid;
-                padding: 0 10px;
-                margin-right: 20px;
-                cursor: pointer;
-              "
-              @click="makeSureInfo()"
-              >确定</span
-            ><span
-              style="border: 1px solid; padding: 0 10px; cursor: pointer"
-              @click="cancelInfo()"
-              >取消</span
-            >
+            <el-button @click="makeSureInfo()" type="success">确定</el-button>
+            <el-button @click="cancelInfo()" type="warning">取消</el-button>
           </div>
         </div>
       </div>
@@ -74,7 +75,7 @@
     <div class="list">
       <template v-for="item in order.itemList" :key="item">
         <div class="list-item" v-if="order.itemList.length != 0">
-          <img src="../assets/goodgood.jpg">
+          <img src="../assets/goodgood.jpg" />
           <div class="list-item-detail TBmid">
             {{ item.goodsName }}
           </div>
@@ -115,7 +116,7 @@
         <span>货到付款</span>
       </div>
       <div class="account-btn">
-        <button style="cursor: pointer">提交订单</button>
+        <button style="cursor: pointer" @click="handleBuy()">提交订单</button>
       </div>
     </div>
   </div>
@@ -159,6 +160,9 @@ export default {
   },
 
   methods: {
+    goPage(pageName) {
+      this.router.push({ name: pageName });
+    },
     handleBuy() {
       if (this.address == "") {
         this.$message({
@@ -167,6 +171,37 @@ export default {
         });
         return;
       }
+      let phone = "";
+      let inf = null;
+      for (let i = 0; i < this.info.length; i++) {
+        if (this.info[i].select == true) {
+          phone = this.info[i].phone;
+          inf = this.info[i];
+          break;
+        }
+      }
+      if (inf == null) {
+        this.$message({
+          type: "error",
+          message: "未选择地址",
+        });
+        return;
+      }
+      let reg = /^1[3|4|5|6|7|8|9][0-9]{9}$/;
+      if (!reg.test(phone)) {
+        this.$message({
+          type: "error",
+          message: "手机号错误",
+        });
+        return;
+      }
+
+      this.$message({
+        type: "success",
+        message: "购买成功",
+      });
+
+      this.goPage("MainPage");
     },
     updateAddress() {
       for (let i = 0; i < this.info.length; i++) {
@@ -176,6 +211,7 @@ export default {
         }
       }
     },
+
     getTotalPrice() {
       let t = 0;
       for (let i = 0; i < this.order.itemList.length; i++) {

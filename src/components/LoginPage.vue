@@ -34,14 +34,6 @@
       </div>
     </div>
 
-    <!--    <div class="footer">-->
-    <!--      <div class="footer-main">-->
-    <!--        <div class="footer-main-item">帮助</div>-->
-    <!--        <div class="footer-main-item">隐私</div>-->
-    <!--        <div class="footer-main-item">条款</div>-->
-    <!--      </div>-->
-    <!--      <div class="footer-copyright">copyright@2017蚂蚁金服体验技术部出品</div>-->
-    <!--    </div>-->
   </div>
 </template>
   
@@ -93,6 +85,13 @@ export default {
       axios.post(url).then((data) => {
         // console.log(data);
         if (data.data.code == 1000) {
+          if (data.data.result.role != "USER") {
+            this.$message({
+              type: "error",
+              message: "登录失败",
+            });
+            return
+          }
           this.store.commit("handleChangeUser", data.data.result);
           this.store.commit("handleChangeToken", data.data.msg);
           this.$message({

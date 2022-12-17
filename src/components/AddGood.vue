@@ -121,10 +121,15 @@
           <div style="margin-top: 10px">
             <span style="margin-left: 15%">{{ item }}</span>
             <el-input
-              v-model="goodInfo.piclist[item-1]"
+              v-model="goodInfo.piclist[item - 1]"
               style="margin-left: 10px; width: 60%"
             ></el-input>
-            <el-button type="danger" style="margin-left: 10px;" @click="handleDeletePic(item-1)">删除</el-button>
+            <el-button
+              type="danger"
+              style="margin-left: 10px"
+              @click="handleDeletePic(item - 1)"
+              >删除</el-button
+            >
           </div>
         </template>
       </div>
@@ -157,14 +162,12 @@ export default {
       temp: "",
       user: {},
       store: {},
-      category: [
-        
-      ],
+      category: [],
       value: "",
 
       goodInfo: {
         name: "",
-        number: "",
+        number: 1,
         price: "",
         logo: "",
         category: "",
@@ -175,10 +178,9 @@ export default {
   beforeMount() {
     this.store = useStore();
     this.user = this.store.state.userInfo;
-
   },
-  mounted(){
-    this.getCate()
+  mounted() {
+    this.getCate();
   },
   methods: {
     goPage(pageName) {
@@ -203,21 +205,21 @@ export default {
       this.goPage("CarPage");
     },
 
-    getCate(){
-      let url='api/index/queryAllCat'
+    getCate() {
+      let url = "api/index/queryAllCat";
       axios.get(url).then((data) => {
         console.log(data);
         if (data.data.code == 200) {
-          for(let i=0;i<30;i++){
-            this.category[i]={}
-            this.category[i].label=data.data.result[i].name
-            this.category[i].value='选项'+(Number(i+1))
+          for (let i = 0; i < 30; i++) {
+            this.category[i] = {};
+            this.category[i].label = data.data.result[i].name;
+            this.category[i].value = "选项" + Number(i + 1);
           }
         }
       });
     },
-    handleDeletePic(index){
-      this.goodInfo.piclist.splice(index,1)
+    handleDeletePic(index) {
+      this.goodInfo.piclist.splice(index, 1);
     },
     addPicLength() {
       let k = this.goodInfo.piclist.length;
@@ -266,6 +268,26 @@ export default {
       }) //传参
         .then((res) => {
           console.log(res);
+          if (res.data.code == 200) {
+            this.goodInfo = {
+              name: "",
+              number: 1,
+              price: "",
+              logo: "",
+              category: "",
+              piclist: [],
+            };
+            this.$message({
+              type: "success",
+              message: "添加成功",
+            });
+          }
+          else{
+            this.$message({
+            type: "error",
+            message: "添加失败",
+          });
+          }
         })
         .catch((err) => {
           console.log(err);

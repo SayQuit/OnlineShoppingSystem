@@ -124,7 +124,7 @@ export default {
         }
         this.carId = data.data.result.shoppingcartId;
         // console.log(this.carId);
-        console.log(data);
+        // console.log(data);
       });
     },
     handleDeleteGood(index) {
@@ -148,7 +148,7 @@ export default {
 
       let amount = 0;
 
-      let order = [{}];
+      let order = [];
       for (let i = 0; i < newList.length; i++) {
         if(i==index)continue;
         let k = order.length;
@@ -182,9 +182,12 @@ export default {
           if (res.data.code == 200) {
             console.log(res);
             this.$message({
-              type: "error",
+              type: "success",
               message: "删除成功",
+
+              
             });
+            this.list.splice(index,1)
           } else {
             this.$message({
               type: "error",
@@ -314,6 +317,9 @@ export default {
     },
   },
 };
+
+
+
 </script>
   
 <style scoped>
