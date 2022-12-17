@@ -148,7 +148,7 @@ export default {
 
       let amount = 0;
 
-      let order = [];
+      let order = [{}];
       for (let i = 0; i < newList.length; i++) {
         if(i==index)continue;
         let k = order.length;
@@ -163,7 +163,7 @@ export default {
 
       // console.log(order);
       let data = {
-        ShoppingcartId: this.carId,
+        shoppingcartId: this.carId,
         totalAmount: amount,
         realAmount: amount,
         itemList: order,
